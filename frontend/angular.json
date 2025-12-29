@@ -30,9 +30,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/styles.scss"]
           },
           "configurations": {
             "production": {
@@ -48,12 +46,24 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/parking-system-store/src/environments/environment.development.ts",
+                  "with": "src/parking-system-store/src/environments/environment.production.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/parking-system-store/src/environments/environment.development.ts",
+                  "with": "src/parking-system-store/src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -72,6 +82,32 @@
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        }
+      }
+    },
+    "parking-system-store": {
+      "projectType": "library",
+      "root": "src/parking-system-store",
+      "sourceRoot": "src/parking-system-store/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "src/parking-system-store/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "src/parking-system-store/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "src/parking-system-store/tsconfig.spec.json"
+          }
         }
       }
     }
