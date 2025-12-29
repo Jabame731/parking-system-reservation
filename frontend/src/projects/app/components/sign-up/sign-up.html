@@ -1,0 +1,149 @@
+<form class="flex flex-col gap-2" #signUpForm="ngForm" appPasswordMatch>
+  <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
+    <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
+      <mat-label>First Name</mat-label>
+      <input
+        required
+        matInput
+        type="text"
+        placeholder="First Name"
+        name="firstName"
+        id="firstName"
+        #firstName="ngModel"
+        [(ngModel)]="input()!.firstName"
+      />
+
+      @if(firstName.invalid) {
+      <mat-error>
+        @if(firstName.hasError("required")) {
+        <span>First Name is Required.</span>
+        }
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
+      <mat-label>Last Name</mat-label>
+      <input
+        required
+        matInput
+        type="text"
+        placeholder="Last Name"
+        name="lastName"
+        id="lastName"
+        #lastName="ngModel"
+        [(ngModel)]="input()!.lastName"
+      />
+
+      @if(lastName.invalid) {
+      <mat-error>
+        @if(lastName.hasError("required")) {
+        <span>Last Name is Required.</span>
+        }
+      </mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
+    <mat-label>Address</mat-label>
+    <input
+      required
+      matInput
+      type="text"
+      placeholder="Address"
+      name="address"
+      id="address"
+      #address="ngModel"
+      [(ngModel)]="input()!.address"
+    />
+
+    @if(address.invalid) {
+    <mat-error>
+      @if(address.hasError("required")) {
+      <span>Address is Required.</span>
+      }
+    </mat-error>
+    }
+  </mat-form-field>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
+    <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
+      <mat-label>Contact Number</mat-label>
+      <input
+        required
+        matInput
+        type="number"
+        placeholder="Contact Number"
+        name="contactNumber"
+        id="contactNumber"
+        #contactNumber="ngModel"
+        contactNumber="ngModel"
+        [(ngModel)]="input()!.contactNumber"
+      />
+
+      @if(contactNumber.invalid) {
+      <mat-error>
+        @if(contactNumber.hasError("required")) {
+        <span>Contact Number is Required.</span>
+        }
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
+      <mat-label>Email</mat-label>
+      <input
+        required
+        matInput
+        type="text"
+        placeholder="Email"
+        name="email"
+        #email="ngModel"
+        [(ngModel)]="input()!.email"
+      />
+
+      @if (email.touched && email.hasError("required")) {
+      <mat-error>Email is required.</mat-error>
+      } @if (email.hasError("email") && !email.hasError("required")) {
+      <mat-error> Please enter a valid email address.</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
+    <mat-form-field hideRequiredMarker appearance="outline">
+      <mat-label>Password</mat-label>
+      <input
+        type="password"
+        [(ngModel)]="input()!.password"
+        name="password"
+        required
+        matInput
+        #password="ngModel"
+      />
+      @if (password.touched && password.hasError("required")) {
+      <mat-error>Password is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field hideRequiredMarker appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input
+        type="password"
+        [(ngModel)]="input()!.cPassword"
+        name="cPassword"
+        required
+        matInput
+        #cPassword="ngModel"
+      />
+      @if (cPassword.touched && cPassword.hasError("required")) {
+      <mat-error>Confirm Password is required.</mat-error>
+      } @if (cPassword.hasError("mismatch")) {
+      <mat-error>Passwords do not match.</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <app-submit-button [isDisabled]="signUpForm.invalid" [text]="'Register'"></app-submit-button>
+</form>

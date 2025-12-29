@@ -1,0 +1,71 @@
+-- 1. User Table
+-- CREATE TABLE users (
+--     id CHAR(36) PRIMARY KEY,
+--     firstName VARCHAR(50) NOT NULL,
+--     lastName VARCHAR(50) NOT NULL,
+--     contactNumber VARCHAR(50),
+--     email VARCHAR(100) NOT NULL UNIQUE,
+--     password VARCHAR(255) NOT NULL,
+--     image VARCHAR(255),
+--     userRole VARCHAR(20) NOT NULL,
+--     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- );
+
+-- 2. Vehicle Table
+-- CREATE TABLE vehicle (
+--     id CHAR(36) PRIMARY KEY,
+--     ownerId CHAR(36) NOT NULL,
+--     licensePlate VARCHAR(20) NOT NULL UNIQUE,
+--     carType VARCHAR(50),
+--     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--     CONSTRAINT fk_vehicle_owner FOREIGN KEY (ownerId) REFERENCES user(id) ON DELETE CASCADE
+-- );
+
+-- 3. Parking Lot Table
+-- CREATE TABLE parking_lot (
+--     id CHAR(36) PRIMARY KEY,
+--     name VARCHAR(100) NOT NULL,
+--     address VARCHAR(255) NOT NULL,
+--     capacity INT(11) NOT NULL,
+--     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- );
+
+-- 4. Parking Space Table
+-- CREATE TABLE parking_space (
+--     id CHAR(36) PRIMARY KEY,
+--     spaceNumber VARCHAR(20) NOT NULL,
+--     sensorValue VARCHAR(50),
+--     lotNumber CHAR(36) NOT NULL,
+--     availability TINYINT(1) DEFAULT 1,
+--     CONSTRAINT fk_space_lot FOREIGN KEY (lotNumber) REFERENCES parking_lot(id) ON DELETE CASCADE
+-- );
+
+-- 5. Reservation Table
+-- CREATE TABLE reservation (
+--     id CHAR(36) PRIMARY KEY,
+--     spaceId CHAR(36) NOT NULL,
+--     userId CHAR(36) NOT NULL,
+--     sensorValue VARCHAR(50),
+--     startTime DATETIME NOT NULL,
+--     endTime DATETIME NOT NULL,
+--     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--     CONSTRAINT fk_res_space FOREIGN KEY (spaceId) REFERENCES parking_space(id),
+--     CONSTRAINT fk_res_user FOREIGN KEY (userId) REFERENCES user(id)
+-- );
+
+-- 6. Transaction Table
+-- CREATE TABLE transaction (
+--     id CHAR(36) PRIMARY KEY,
+--     reservationId CHAR(36) NOT NULL,
+--     amount DECIMAL(10, 2) NOT NULL,
+--     status VARCHAR(20) NOT NULL,
+--     paymentMethod VARCHAR(50),
+--     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+--     CONSTRAINT fk_trans_res FOREIGN KEY (reservationId) REFERENCES reservation(id)
+-- );
+
+

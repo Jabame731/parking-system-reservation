@@ -1,0 +1,43 @@
+<div class="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
+  @if(!showSignUp()) {
+  <section
+    class="w-full max-w-[550px] border border-gray-300 bg-white px-10 pb-6 pt-10 text-center"
+  >
+    <h1 class="mb-8 text-5xl tracking-tighter text-black">IoT Based Smart Parking</h1>
+    <app-login [input]="inputSignIn" (submit)="handleSubmitLogin($event)"></app-login>
+  </section>
+
+  <section class="mt-3 w-full max-w-[550px] border border-gray-300 bg-white py-6 text-center">
+    <p class="text-base text-gray-800">
+      Don't have an account?
+      <span
+        class="font-medium cursor-pointer text-blue-500 hover:underline"
+        (click)="switchToSignUp()"
+      >
+        Register
+      </span>
+    </p>
+  </section>
+
+  }@else {
+  <section
+    class="w-full max-w-[750px] border border-gray-300 bg-white px-10 pb-6 pt-10 text-center"
+  >
+    <h1 class="mb-8 text-5xl tracking-tighter text-black">IoT Based Smart Parking</h1>
+    <app-sign-up [input]="inputSignUp"></app-sign-up>
+  </section>
+
+  <section class="mt-3 w-full max-w-[750px] border border-gray-300 bg-white py-6 text-center">
+    <p class="text-base text-gray-800">
+      Have an account?
+      <span
+        class="font-medium cursor-pointer text-blue-500 hover:underline"
+        (click)="switchToSignIn()"
+      >
+        Log In
+      </span>
+    </p>
+  </section>
+
+  }
+</div>
