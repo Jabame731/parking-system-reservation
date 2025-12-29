@@ -1,0 +1,46 @@
+<form class="flex flex-col gap-2" #authForm="ngForm" (ngSubmit)="login(authForm)">
+  <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
+    <mat-label>Email</mat-label>
+    <input
+      required
+      matInput
+      type="text"
+      placeholder="Email"
+      name="email"
+      id="email"
+      #email="ngModel"
+      [(ngModel)]="input()!.email"
+    />
+
+    @if(email.invalid) {
+    <mat-error>
+      @if(email.hasError("required")) {
+      <span>Email is Required</span>
+      }
+    </mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
+    <mat-label>Password</mat-label>
+    <input
+      required
+      matInput
+      type="password"
+      placeholder="Password"
+      name="password"
+      id="password"
+      #password="ngModel"
+      [(ngModel)]="input()!.password"
+    />
+    @if(password.invalid) {
+    <mat-error>
+      @if(password.hasError("required")) {
+      <span>Password is Required</span>
+      }
+    </mat-error>
+    }
+  </mat-form-field>
+
+  <app-submit-button [isDisabled]="authForm.invalid" [text]="'Login'"></app-submit-button>
+</form>
