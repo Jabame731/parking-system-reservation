@@ -1,11 +1,27 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 
 //routes imported
 import authRouter from "./routes/auth/auth.routes";
 
 const app = express();
 dotenv.config();
+
+const allowedOrigins = [process.env.DEVELOPMENT_FRONTEND_PORT!];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        console.error("CORS blocked origin:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
 
 app.use(express.json());
 

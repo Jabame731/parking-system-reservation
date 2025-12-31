@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "src",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -11,9 +12,16 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+    "paths": {
+      "parking-system-store": ["./dist/parking-system-store"],
+      "@parking-system-store/*": ["parking-system-store/src/*"]
+    },
+    "outDir": "./dist/out-tsc",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -28,6 +36,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./src/parking-system-store/tsconfig.lib.json"
+    },
+    {
+      "path": "./src/parking-system-store/tsconfig.spec.json"
     }
   ]
 }

@@ -26,7 +26,7 @@ import { SignInAttributes } from '../../models';
 export class Login {
   loading = input<boolean>();
 
-  error = input<string>();
+  error = input<string | null | undefined>();
 
   input = input<SignInAttributes>();
 

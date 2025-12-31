@@ -4,7 +4,12 @@
     class="w-full max-w-[550px] border border-gray-300 bg-white px-10 pb-6 pt-10 text-center"
   >
     <h1 class="mb-8 text-5xl tracking-tighter text-black">IoT Based Smart Parking</h1>
-    <app-login [input]="inputSignIn" (submit)="handleSubmitLogin($event)"></app-login>
+    <app-login
+      [input]="inputSignIn"
+      [loading]="userAuthLoading()"
+      [error]="userAuthError()"
+      (submit)="handleSubmitLogin($event)"
+    ></app-login>
   </section>
 
   <section class="mt-3 w-full max-w-[550px] border border-gray-300 bg-white py-6 text-center">
@@ -24,7 +29,14 @@
     class="w-full max-w-[750px] border border-gray-300 bg-white px-10 pb-6 pt-10 text-center"
   >
     <h1 class="mb-8 text-5xl tracking-tighter text-black">IoT Based Smart Parking</h1>
-    <app-sign-up [input]="inputSignUp"></app-sign-up>
+    <app-sign-up
+      [input]="inputSignUp"
+      [loading]="isRegisterLoading()"
+      [successMessage]="getSuccessRegisterMessage()"
+      [isSucceeded]="isRegisterSucceeded()"
+      [error]="getRegisterErrorMessage()"
+      (submit)="handleSubmitRegister($event)"
+    ></app-sign-up>
   </section>
 
   <section class="mt-3 w-full max-w-[750px] border border-gray-300 bg-white py-6 text-center">

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, input, Output } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MatError, MatLabel, MatFormField } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -26,4 +26,18 @@ import { PasswordMatch } from '../../directives';
 })
 export class SignUp {
   input = input<SignUpAttributes>();
+
+  loading = input<boolean>();
+
+  error = input<string | null | undefined>();
+
+  successMessage = input<string | null>();
+
+  isSucceeded = input<boolean | undefined>();
+
+  @Output() submit = new EventEmitter<NgForm>();
+
+  register(data: NgForm) {
+    this.submit.emit(data);
+  }
 }

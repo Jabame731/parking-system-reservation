@@ -13,51 +13,40 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@an
 })
 export class PasswordMatch implements Validator {
   validate(control: AbstractControl): ValidationErrors | null {
-    console.log(`test`, control);
-
-    if (!control || !(control as any).controls) return null;
-
     const group = control as any;
-    const passwordNgModel = group.controls['password'];
-    const confirmPasswordNgModel = group.controls['cPassword'];
+    if (!group?.controls) return null;
 
-    if (!passwordNgModel || !confirmPasswordNgModel) return null;
+    const passwordCtrl = group.controls['password'];
+    const confirmCtrl = group.controls['cPassword'];
+    const emailCtrl = group.controls['email'];
 
-    const password = passwordNgModel?.value;
-    const confirmPassword = confirmPasswordNgModel?.value;
+    if (passwordCtrl && confirmCtrl) {
+      const password = passwordCtrl.value;
+      const confirm = confirmCtrl.value;
 
-    if (confirmPassword && password !== confirmPassword) {
-      confirmPasswordNgModel.setErrors({
-        ...confirmPasswordNgModel.errors,
-        mismatch: true,
-      });
-
-      return { mismatch: true };
-    } else {
-      if (confirmPasswordNgModel.hasError('mismatch')) {
-        const errors = { ...confirmPasswordNgModel.errors };
-        delete errors['mismatch'];
-        confirmPasswordNgModel.setErrors(Object.keys(errors).length ? errors : null);
+      if (confirm && password !== confirm) {
+        confirmCtrl.setErrors({
+          ...(confirmCtrl.errors ?? {}),
+          mismatch: true,
+        });
+      } else if (confirmCtrl.errors?.['mismatch']) {
+        const { mismatch, ...rest } = confirmCtrl.errors;
+        confirmCtrl.setErrors(Object.keys(rest).length ? rest : null);
       }
     }
 
-    //added for email validator
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const emailNgModel = group.controls['email'];
-    const email = emailNgModel?.value;
+    if (emailCtrl) {
+      const email = emailCtrl.value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(email)) {
-      emailNgModel.setErrors({
-        ...emailNgModel.errors,
-        email: true,
-      });
-
-      return { email: true };
-    } else {
-      if (emailNgModel.hasError('email')) {
-        const errors = { ...emailNgModel.errors };
-        delete errors['email'];
-        emailNgModel.setErrors(Object.keys(errors).length ? errors : null);
+      if (email && !emailRegex.test(email)) {
+        emailCtrl.setErrors({
+          ...(emailCtrl.errors ?? {}),
+          email: true,
+        });
+      } else if (emailCtrl.errors?.['email']) {
+        const { email, ...rest } = emailCtrl.errors;
+        emailCtrl.setErrors(Object.keys(rest).length ? rest : null);
       }
     }
 
