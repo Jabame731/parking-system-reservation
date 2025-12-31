@@ -1,4 +1,9 @@
-<form class="flex flex-col gap-2" #signUpForm="ngForm" appPasswordMatch>
+<form
+  class="flex flex-col gap-2"
+  #signUpForm="ngForm"
+  appPasswordMatch
+  (ngSubmit)="register(signUpForm)"
+>
   <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-4">
     <mat-form-field hideRequiredMarker appearance="outline" class="w-full">
       <mat-label>First Name</mat-label>
@@ -145,5 +150,9 @@
     </mat-form-field>
   </div>
 
-  <app-submit-button [isDisabled]="signUpForm.invalid" [text]="'Register'"></app-submit-button>
+  <app-submit-button
+    [isDisabled]="signUpForm.invalid || loading()!"
+    [text]="'Register'"
+    [isLoading]="loading()!"
+  ></app-submit-button>
 </form>

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthRepositoryInterface } from '../../../domain/index';
 import { Observable } from 'rxjs';
-import { UserResponseModel } from '../../models';
+import { RegisterUserData, UserResponseModel } from '../../models';
 import { AuthDatasource } from '../../datasources/index';
 
 @Injectable({
@@ -12,5 +12,9 @@ export class AuthRepository implements AuthRepositoryInterface {
 
   login(email: string, password: string): Observable<UserResponseModel> {
     return this.authDatasource.login(email, password);
+  }
+
+  register(data: RegisterUserData): Observable<{ message: string }> {
+    return this.authDatasource.registerUser(data);
   }
 }

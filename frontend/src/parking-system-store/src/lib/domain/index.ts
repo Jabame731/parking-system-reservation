@@ -1,1 +1,1 @@
-export * from './repository/auth-repository.interface';
+export * from './repository';

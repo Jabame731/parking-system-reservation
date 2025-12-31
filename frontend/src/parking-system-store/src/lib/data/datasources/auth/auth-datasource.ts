@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthInterface, Document, UserResponseModel } from '../../models';
+import { AuthInterface, Document, RegisterUserData, UserResponseModel } from '../../models';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
@@ -35,6 +35,17 @@ export class AuthDatasource implements AuthInterface {
       })
       .pipe(
         map((resp: Document<UserResponseModel>) => resp.data as UserResponseModel),
+        catchError((err) => this.authErrorReport(err))
+      );
+  }
+
+  registerUser(data: RegisterUserData): Observable<{ message: string }> {
+    return this.http
+      .post<Document<{ message: string }>>(`${this.baseUrl}/api/auth/register`, {
+        data,
+      })
+      .pipe(
+        map((resp: Document<{ message: string }>) => resp as { message: string }),
         catchError((err) => this.authErrorReport(err))
       );
   }

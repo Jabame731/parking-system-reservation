@@ -20,7 +20,7 @@
 --     carType VARCHAR(50),
 --     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
 --     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
---     CONSTRAINT fk_vehicle_owner FOREIGN KEY (ownerId) REFERENCES user(id) ON DELETE CASCADE
+--     CONSTRAINT fk_vehicle_owner FOREIGN KEY (ownerId) REFERENCES users(id) ON DELETE CASCADE
 -- );
 
 -- 3. Parking Lot Table
@@ -54,7 +54,7 @@
 --     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
 --     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 --     CONSTRAINT fk_res_space FOREIGN KEY (spaceId) REFERENCES parking_space(id),
---     CONSTRAINT fk_res_user FOREIGN KEY (userId) REFERENCES user(id)
+--     CONSTRAINT fk_res_user FOREIGN KEY (userId) REFERENCES users(id)
 -- );
 
 -- 6. Transaction Table

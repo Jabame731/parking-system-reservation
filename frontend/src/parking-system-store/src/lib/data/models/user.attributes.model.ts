@@ -16,3 +16,12 @@ export interface UserResponseModel {
   attributes: User;
   accessToken: string;
 }
+
+export interface RegisterUserData {
+  firstName: string;
+  lastName: string;
+  address: string;
+  contactNumber: string;
+  email: string;
+  password: string;
+}

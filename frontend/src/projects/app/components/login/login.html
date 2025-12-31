@@ -30,6 +30,7 @@
       placeholder="Password"
       name="password"
       id="password"
+      [disabled]="loading()!"
       #password="ngModel"
       [(ngModel)]="input()!.password"
     />
@@ -42,5 +43,9 @@
     }
   </mat-form-field>
 
-  <app-submit-button [isDisabled]="authForm.invalid" [text]="'Login'"></app-submit-button>
+  <app-submit-button
+    [isDisabled]="authForm.invalid || loading()!"
+    [isLoading]="loading()!"
+    [text]="'Login'"
+  ></app-submit-button>
 </form>
