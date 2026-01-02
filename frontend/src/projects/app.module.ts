@@ -9,7 +9,7 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { MetaReducer, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { reducers } from '@parking-system-store/public-api';
+import { reducers } from '@parking-system-store/lib/data/store/reducer/meta/meta-reducer.reducer';
 import { ParkingSystemStoreModule } from '@parking-system-store/lib/store.module';
 
 export const extModules = [

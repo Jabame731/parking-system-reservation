@@ -17,6 +17,8 @@ export class AuthUsecase {
 
   isAuthenticated$ = this.store.pipe(select(fromStore.getAuthenticated));
 
+  getAuthFullName$ = this.store.pipe(select(fromStore.getUserName));
+
   //register
   isRegisterLoading$ = this.store.pipe(select(fromStore.isRegisterLoading));
 

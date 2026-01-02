@@ -1,0 +1,100 @@
+<div class="w-full">
+  <div class="transition-all" [class.-mt-[100%]]="!portalOpen()" [class.mt-[0%]]="portalOpen()">
+    @if (portalOpen()) {
+      <div class="flex gap-4 p-4 bg-gray-100 border-b-2 border-primary">
+        <ng-container *ngTemplateOutlet="titlePortal"></ng-container>
+      </div>
+    }
+  </div>
+</div>
+<mat-drawer-container
+  [hasBackdrop]="smallerScreens()"
+  [class.is-expanded]="(isExpanded() && largerScreens()) || (drawerOpen() && smallerScreens())"
+  class="transition-all block min-h-[100vh]"
+  (backdropClick)="toggleDrawer()"
+>
+  <mat-drawer
+    class="!bg-white"
+    [opened]="drawerOpen()"
+    [disableClose]="true"
+    [class.is-expanded]="(isExpanded() && largerScreens()) || (drawerOpen() && smallerScreens())"
+  >
+    <app-logo [title]="'Smart Parking'" [expanded]="isExpanded() || smallerScreens()"></app-logo>
+
+    <app-sidenav
+      [canClose]="!smallerScreens()"
+      [isExpanded]="isExpanded() || smallerScreens()"
+      [menuItems]="currentMenuItems"
+      (toggleExpansion)="toggleExpansion()"
+    ></app-sidenav>
+  </mat-drawer>
+
+  <mat-drawer-content
+    class="!flex flex-col"
+    [style.overflow]="'hidden'"
+    [class.has-sidebar]="largerScreens()"
+  >
+    <mat-toolbar class="bg-transparent" color="transparent">
+      <mat-toolbar-row class="@container">
+        <div class="flex gap-4 h-full w-full items-center justify-between">
+          @if (smallerScreens()) {
+            <div class="flex items-center gap-4">
+              <button mat-icon-button (click)="toggleDrawer()" [disabled]="portalOpen()">
+                <mat-icon>menu</mat-icon>
+              </button>
+            </div>
+          }
+
+          <!--  -->
+          @if (portal()) {
+            <div class="flex @5xl:hidden">
+              <button
+                (click)="togglePortal()"
+                type="button"
+                [ngClass]="{ 'text-white': portalOpen() }"
+                class="p-3 flex items-center shadow-none"
+              >
+                <mat-icon>tune</mat-icon>
+                <span class="!text-xs">Page Filters</span>
+              </button>
+            </div>
+          }
+
+          <div class="hidden @5xl:flex grow">
+            <ng-container *ngTemplateOutlet="titlePortal"></ng-container>
+          </div>
+
+          <button [matMenuTriggerFor]="userMenu" class="p-2">
+            <app-user-identity
+              [username]="getAuthFullName$ | async"
+              [enableContainerQuery]="true"
+            ></app-user-identity>
+          </button>
+
+          <mat-menu #userMenu xPosition="before">
+            <button mat-menu-item class="group">
+              <mat-icon class="!text-primary-300 group-hover:!text-primary">password</mat-icon>
+              My Account
+            </button>
+
+            <button mat-menu-item (click)="logout()" class="group">
+              <mat-icon class="!text-red-300 group-hover:!text-red-500"> logout </mat-icon>
+              Logout
+            </button>
+          </mat-menu>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div class="content overflow-scroll p-2 md:p-6 flex-auto">
+      sdfds
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+<ng-template #titlePortal>
+  @if (portalOpen()) {
+    <app-page-title></app-page-title>
+  }
+</ng-template>
