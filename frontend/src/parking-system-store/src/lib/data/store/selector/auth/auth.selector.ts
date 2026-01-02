@@ -41,3 +41,13 @@ export const getRegisterErrorMessage = createSelector(
   selectAuthState,
   (state: fromAuth.AuthState) => state.registerError
 );
+
+export const getUserName = createSelector(getAuthProfile, (user: UserResponseModel | undefined) => {
+  if (user) {
+    return {
+      firstName: user.attributes?.firstName,
+      lastName: user.attributes?.lastName,
+    };
+  }
+  return null;
+});

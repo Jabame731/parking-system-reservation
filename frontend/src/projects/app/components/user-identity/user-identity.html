@@ -1,0 +1,15 @@
+<div class="user-identity" (click)="clicked.emit()" [class.click-enabled]="clickEnabled()">
+  <div
+    class="user-identity--circle"
+    [ngClass]="{ 'user-identity--circle--small': isSmall() }"
+    [ngClass]="{ 'user-identity--circle--loading': skeleton() }"
+  >
+    {{ username()?.firstName | slice: 0 : 1 }}{{ username()?.lastName | slice: 0 : 1 }}
+  </div>
+
+  @if (skeleton()) {
+    <p class="font-display" [ngClass]="{ '@xs:hidden @lg:block': enableContainerQuery }">
+      {{ username()?.firstName }} {{ username()?.lastName }}
+    </p>
+  }
+</div>

@@ -1,0 +1,58 @@
+<div
+  class="smart-parking-sidenav flex flex-col h-full gap-3 mt-2"
+  [class.is-expanded]="isExpanded()"
+>
+  @if (isExpanded()) {
+    @for (menu of menuItems(); track menu.label) {
+      <ng-template *ngTemplateOutlet="menuItem; context: { $implicit: menu }"></ng-template>
+    }
+  } @else {
+    @for (menu of menuItems(); track menu.label) {
+      <ng-template *ngTemplateOutlet="menuItem; context: { $implicit: menu }"></ng-template>
+    }
+  }
+  @if (canClose()) {
+    <div class="flex p-4 mt-auto">
+      <button
+        (click)="toggleExpansion.emit()"
+        class="flex gap-2 items-center text-sm text-gray-600"
+      >
+        <div class="border rounded-full p-1 flex">
+          <mat-icon
+            aria-label="Menu"
+            [class.rotate-180]="!isExpanded()"
+            class="transition-transform"
+            >arrow_backward</mat-icon
+          >
+        </div>
+        @if (isExpanded()) {
+          Collapse Menu
+        }
+      </button>
+    </div>
+  }
+</div>
+
+<ng-template #menuItem let-menu>
+  <a
+    class="font-display p-3 flex gap-4 border-l-4 border-transparent border-solid focus:outline-accent focus:outline-2 focus:-outline-offset-2 focus:outline hover:bg-gray-100 transition-colors text-gray-800"
+    [class.justify-center]="!isExpanded()"
+    matLine
+    [routerLink]="menu.routerLink"
+    routerLinkActive="!text-primary group is-active !border-accent bg-gray-100"
+    [matTooltip]="menu.label"
+    [matTooltipPosition]="'right'"
+    [matTooltipDisabled]="isExpanded()"
+    [matTooltipShowDelay]="500"
+  >
+    @if (menu.icon) {
+      <mat-icon class="!text-primary-300 group-[.is-active]:!text-primary">
+        {{ menu.icon }}
+      </mat-icon>
+    }
+
+    @if (isExpanded()) {
+      <span class="smart-parking-sidenav--child--text">{{ menu.label }}</span>
+    }
+  </a>
+</ng-template>

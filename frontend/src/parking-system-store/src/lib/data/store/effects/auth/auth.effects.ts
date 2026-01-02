@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthRepository } from '../../../repositories/index';
 import { Router } from '@angular/router';
 import * as fromAuth from '../../actions/auth.action';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { UserResponseModel } from '@parking-system-store/lib/data/models';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -64,4 +64,16 @@ export class AuthEffects {
       })
     );
   });
+
+  logout$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(fromAuth.logoutAttempted),
+        tap(() => {
+          localStorage.clear();
+          this.router.navigate(['/auth']);
+        })
+      ),
+    { dispatch: false }
+  );
 }
