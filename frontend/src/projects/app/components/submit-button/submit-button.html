@@ -8,20 +8,20 @@
     [attr.form]="form()"
     class="text-lg w-full text-center relative submit-button"
   >
-    <span class="flex justify-center items-center gap-2 font-display dark:text-gray-300">
-      @if(icon()) {
-      <mat-icon>{{ icon() }}</mat-icon>
+    <span class="flex justify-center items-center gap-2 font-display">
+      @if (icon()) {
+        <mat-icon>{{ icon() }}</mat-icon>
       }
       {{ text() }}
     </span>
 
-    @if(isLoading()) {
-    <mat-progress-spinner
-      color="primary"
-      mode="indeterminate"
-      class="!absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-      diameter="20"
-    ></mat-progress-spinner>
+    @if (isLoading()) {
+      <mat-progress-spinner
+        color="primary"
+        mode="indeterminate"
+        class="!absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        diameter="20"
+      ></mat-progress-spinner>
     }
   </button>
 </div>

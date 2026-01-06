@@ -35,11 +35,12 @@
 
 <ng-template #menuItem let-menu>
   <a
-    class="font-display p-3 flex gap-4 border-l-4 border-transparent border-solid focus:outline-accent focus:outline-2 focus:-outline-offset-2 focus:outline hover:bg-gray-100 transition-colors text-gray-800"
+    class="p-3 flex gap-4 border-l-4 border-transparent border-solid focus:outline-accent focus:outline-2 focus:-outline-offset-2 focus:outline hover:bg-gray-100 transition-colors text-gray-800"
     [class.justify-center]="!isExpanded()"
     matLine
     [routerLink]="menu.routerLink"
     routerLinkActive="!text-primary group is-active !border-accent bg-gray-100"
+    [routerLinkActiveOptions]="{ exact: menu.exactMatchHighlight || false }"
     [matTooltip]="menu.label"
     [matTooltipPosition]="'right'"
     [matTooltipDisabled]="isExpanded()"

@@ -1,0 +1,33 @@
+<div
+  class="grow p-4 min-h-[128px] relative transition-colors"
+  [ngClass]="{
+    'bg-primary-800  hover:bg-primary-900 ': bgColor() === 'bg-primary-800',
+    'bg-green-800  hover:bg-green-900 ': bgColor() === 'bg-green-700',
+    'bg-alert-800 hover:bg-alert-900 ': bgColor() === 'bg-alert-700',
+    'bg-gray-100  hover:bg-gray-200': !bgColor,
+    'text-white': bgColor,
+  }"
+>
+  <h2 class="text-sm z-1 opacity-75">{{ cardTitle() }}</h2>
+  <div class="flex justify-between items-center mt-6">
+    @if (loading()) {
+      <app-skeleton-text
+        [lineHeight]="20"
+        [lines]="1"
+        [minLineWidth]="100"
+        [maxLineWidth]="100"
+      ></app-skeleton-text>
+    } @else {
+      <span class="text-4xl">{{ cardCount() }}</span>
+    }
+
+    <mat-icon
+      class="icon-display absolute left-[70%] bottom-[30%]"
+      [ngClass]="{
+        '!text-white': bgColor(),
+        '!text-gray': !bgColor(),
+      }"
+      >{{ cardIcon() }}</mat-icon
+    >
+  </div>
+</div>

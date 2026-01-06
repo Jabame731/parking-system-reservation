@@ -1,0 +1,63 @@
+<form #addReservation="ngForm" (ngSubmit)="performAddReservation(addReservation)">
+  <div mat-dialog-content class="p-4 sm:p-6 max-h-[80vh] overflow-y-auto">
+    <h2 class="text-xl font-semibold">Add Reservation</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Choose a date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          name="reservationDate"
+          ngModel
+          required
+          #resDate="ngModel"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        @if (resDate.invalid) {
+          <mat-error shadow>Date is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Pick a start time</mat-label>
+        <input
+          matInput
+          [matTimepicker]="startTimePicker"
+          name="startTime"
+          ngModel
+          required
+          #sTime="ngModel"
+        />
+        <mat-timepicker-toggle matIconSuffix [for]="startTimePicker" />
+        <mat-timepicker #startTimePicker />
+        @if (sTime.invalid) {
+          <mat-error>Start time is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="mt-5">
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>Car plate number</mat-label>
+        <input matInput name="carPlate" ngModel required minlength="5" #carPlate="ngModel" />
+
+        @if (carPlate.hasError('required')) {
+          <mat-error>Plate is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="p-4 flex gap-2">
+    <button mat-stroked-button mat-dialog-close color="warn" type="button">Cancel</button>
+    <app-submit-button
+      [isDisabled]="addReservation.invalid || addReservation.pending!"
+      text="Add Parking Reservation"
+      icon="event_upcoming"
+      color="primary"
+      type="submit"
+    ></app-submit-button>
+  </div>
+</form>

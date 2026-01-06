@@ -1,0 +1,11 @@
+<div class="grow shrink-0 basis-[680px] flex flex-col h-[680px]">
+  <div class="h-full">
+    <app-transactions-table-history [dataSource]="dataSource"> </app-transactions-table-history>
+  </div>
+</div>
+
+<ng-container *cdkPortal>
+  <div class="items-center">
+    <span>Transaction History</span>
+  </div>
+</ng-container>
