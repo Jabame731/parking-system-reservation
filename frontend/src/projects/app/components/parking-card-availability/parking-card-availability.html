@@ -1,0 +1,52 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+  @for (slot of slots; track slot.id) {
+    <div
+      class="h-48 rounded-xl border-2 flex flex-col justify-between p-4 transition select-none"
+      [ngClass]="{
+        '!bg-green-50 !border-green-600 !text-green-700 cursor-pointer hover:!bg-green-100':
+          slot.status === 'available',
+
+        '!bg-red-50 !border-red-500 !text-red-700 opacity-60 pointer-events-none':
+          slot.status === 'occupied',
+
+        '!bg-yellow-50 !border-yellow-500 !text-yellow-600 opacity-60 pointer-events-none':
+          slot.status === 'reserved',
+
+        '!bg-gray-200 !border-gray-400 !text-gray-600 opacity-60 pointer-events-none':
+          slot.status === 'maintenance',
+      }"
+      (click)="slot.status === 'available' && onSlotClick(slot)"
+    >
+      <div class="flex justify-center mt-3">
+        <mat-icon
+          class="icon-display"
+          [ngClass]="{
+            '!text-green-600': slot.status === 'available',
+            '!text-red-500': slot.status === 'occupied',
+            '!text-yellow-500': slot.status === 'reserved',
+            '!text-gray-500': slot.status === 'maintenance',
+          }"
+        >
+          {{
+            slot.status === 'occupied'
+              ? 'directions_car'
+              : slot.status === 'reserved'
+                ? 'beenhere'
+                : 'local_parking'
+          }}
+        </mat-icon>
+      </div>
+
+      <div class="text-center font-semibold text-xl">{{ slot.id }}</div>
+      <div class="text-center text-sm font-medium">
+        {{ slot.status | titlecase }}
+      </div>
+
+      @if (slot.plate) {
+        <div class="text-xs text-center opacity-80">
+          {{ slot.plate }}
+        </div>
+      }
+    </div>
+  }
+</div>

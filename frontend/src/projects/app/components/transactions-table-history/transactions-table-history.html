@@ -1,0 +1,130 @@
+<table mat-table #table [dataSource]="dataSource()" [trackBy]="trackById" class="app-table">
+  <ng-container matColumnDef="plateNumber">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Plate Number
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4>{{ element.plateNumber }}</h4>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="slotName">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Slot Name
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4>{{ element.slotName }}</h4>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Date
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4>{{ element.date }}</h4>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="timeStart">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Time Started
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4>{{ element.timeStart }}</h4>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="paymentType">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Payment Type
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4>{{ element.paymentType }}</h4>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="bg-gray-100"></tr>
+
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    class="hover:bg-gray-50 transition-colors duration-150"
+  ></tr>
+
+  @if (!skeleton()) {
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell text-center py-6" colspan="999">
+        <app-empty-history-message
+          [message]="'No record of Reservation'"
+          [icon]="'no_crash'"
+        ></app-empty-history-message>
+      </td>
+    </tr>
+  }
+</table>

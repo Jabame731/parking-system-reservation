@@ -1,0 +1,68 @@
+@use './variables';
+@use '@angular/material' as mat;
+
+$skipped-opacity: 0.35;
+
+.app-table {
+  border-top: 1px solid lightgray;
+  width: 100%;
+
+  .hide-row {
+    display: none;
+  }
+
+  h4 {
+    margin: variables.$spacing-05 0;
+  }
+
+  .mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      height: 40px;
+      top: 20px;
+    }
+
+    .mat-form-field-flex {
+      top: 5px;
+    }
+  }
+
+  @at-root th.mat-mdc-header-cell#{&}__header {
+    padding: variables.$spacing-04;
+    font-weight: normal;
+    font-size: small;
+    color: #212121;
+
+    &--hidden {
+      display: none;
+    }
+
+    mat-icon:not(.table-no-vert) {
+      font-size: 1rem;
+      vertical-align: middle;
+    }
+
+    &--with-left-border {
+      border-left: 1px solid lightgray;
+      border-right: 1px solid lightgray;
+      padding-left: 12px;
+      border-bottom: 1px solid lightgray;
+    }
+  }
+
+  @at-root td.mat-mdc-cell#{&}-row {
+    width: 20%;
+
+    &--hide-content {
+      &:before {
+        content: '';
+      }
+    }
+
+    &--with-left-border {
+      border-left: 1px solid lightgray;
+      border-right: 1px solid lightgray;
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+  }
+}

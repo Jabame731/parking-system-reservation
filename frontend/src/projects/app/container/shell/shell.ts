@@ -125,15 +125,20 @@ export class Shell {
   //hardcoded for now
   currentMenuItems = [
     // DASHBOARD
+    // {
+    //   label: 'Dashboard',
+    //   icon: 'dashboard',
+    //   routerLink: ['/dashboard'],
+    // },
     {
-      label: 'Dashboard',
-      icon: 'dashboard',
+      label: 'Parking Slot',
+      icon: 'garage',
       routerLink: ['/dashboard'],
     },
     {
-      label: 'Dashboard',
-      icon: 'dashboard',
-      routerLink: ['/dashboard'],
+      label: 'Transactions',
+      icon: 'history',
+      routerLink: ['/history'],
     },
   ];
 }

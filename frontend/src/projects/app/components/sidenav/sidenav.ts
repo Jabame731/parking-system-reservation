@@ -4,11 +4,11 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 import { SideNavMenuItem } from 'projects/app/models';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidenav',
-  imports: [CommonModule, MatIconModule, MatTooltipModule, RouterLink],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, RouterModule],
   templateUrl: './sidenav.html',
   styleUrl: './sidenav.scss',
 })

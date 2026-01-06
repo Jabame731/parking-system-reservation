@@ -1,0 +1,41 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <app-parking-card-status
+    [cardCount]="50"
+    [cardIcon]="'local_parking'"
+    [bgColor]="'bg-primary-800'"
+    [cardTitle]="'Total Slot'"
+  ></app-parking-card-status>
+
+  <app-parking-card-status
+    [cardCount]="50"
+    [cardIcon]="'check'"
+    [bgColor]="'bg-green-700'"
+    [cardTitle]="'Available'"
+  ></app-parking-card-status>
+
+  <app-parking-card-status
+    [cardCount]="50"
+    [cardIcon]="'minor_crash'"
+    [bgColor]="'bg-alert-700'"
+    [cardTitle]="'Occupied'"
+  ></app-parking-card-status>
+</div>
+
+<div class="flex gap-4 items-center mt-8 border-b border-gray-400 p-2">
+  <mat-icon class="!text-primary-400">dashboard_2</mat-icon>
+  <h2 class="text-lg">Parking Layout</h2>
+
+  <div></div>
+</div>
+
+<div class="mt-4">
+  <app-parking-card-availability
+    (handleReservation)="handleAddReservation($event)"
+  ></app-parking-card-availability>
+</div>
+
+<ng-container *cdkPortal>
+  <div class="flex gap-4 items-center">
+    <span>Parking Dashboard</span>
+  </div>
+</ng-container>

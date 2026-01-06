@@ -51,7 +51,7 @@
               <button
                 (click)="togglePortal()"
                 type="button"
-                [ngClass]="{ 'text-white': portalOpen() }"
+                [ngClass]="{ 'text-primary': portalOpen() }"
                 class="p-3 flex items-center shadow-none"
               >
                 <mat-icon>tune</mat-icon>
@@ -87,14 +87,13 @@
     </mat-toolbar>
 
     <div class="content overflow-scroll p-2 md:p-6 flex-auto">
-      sdfds
       <router-outlet></router-outlet>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
 
 <ng-template #titlePortal>
-  @if (portalOpen()) {
+  @if (portal()) {
     <app-page-title></app-page-title>
   }
 </ng-template>
