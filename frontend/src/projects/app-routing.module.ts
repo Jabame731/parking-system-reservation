@@ -1,5 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
-import { Auth, Parking, Shell, Transactions } from './app/container';
+import { Auth, Dashboard, Parking, Shell, Transactions, Users } from './app/container';
 import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
@@ -12,6 +12,18 @@ export const routes: Routes = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
+      //admin only
+      {
+        path: 'analytics',
+        component: Dashboard,
+        title: 'Admin Dashboard',
+      },
+      {
+        path: 'users',
+        component: Users,
+        title: 'Users',
+      },
+      //users and admin
       {
         path: 'dashboard',
         component: Parking,

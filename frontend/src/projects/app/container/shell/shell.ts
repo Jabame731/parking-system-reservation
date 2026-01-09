@@ -131,6 +131,16 @@ export class Shell {
     //   routerLink: ['/dashboard'],
     // },
     {
+      label: 'Dashboard',
+      icon: 'dashboard',
+      routerLink: ['/analytics'],
+    },
+    {
+      label: 'Users',
+      icon: 'person',
+      routerLink: ['/users'],
+    },
+    {
       label: 'Parking Slot',
       icon: 'garage',
       routerLink: ['/dashboard'],

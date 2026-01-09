@@ -13,13 +13,19 @@ import { MatIcon } from '@angular/material/icon';
 export class ParkingCardStatus {
   loading = input<boolean>();
 
-  cardCount = input<number>();
+  cardCount = input<number | string>();
 
   cardIcon = input<string>();
 
   cardTitle = input<string>();
 
-  bgColor = input<'bg-primary' | 'bg-accent' | 'bg-green-700' | 'bg-primary-800' | 'bg-alert-700'>(
-    'bg-primary',
-  );
+  bgColor = input<
+    | 'bg-primary'
+    | 'bg-accent'
+    | 'bg-green-700'
+    | 'bg-primary-800'
+    | 'bg-alert-700'
+    | 'bg-accent-700'
+    | 'bg-gray-700'
+  >('bg-primary');
 }

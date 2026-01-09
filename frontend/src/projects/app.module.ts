@@ -11,6 +11,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { reducers } from '@parking-system-store/lib/data/store/reducer/meta/meta-reducer.reducer';
 import { ParkingSystemStoreModule } from '@parking-system-store/lib/store.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export const extModules = [
   StoreDevtoolsModule.instrument({
@@ -42,6 +43,7 @@ const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CommonModule,
     RouterOutlet,
     AppRoutingModule,

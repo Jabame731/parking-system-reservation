@@ -1,9 +1,13 @@
 <div
   class="grow p-4 min-h-[128px] relative transition-colors"
   [ngClass]="{
+    'bg-primary  hover:bg-primary-600 ': bgColor() === 'bg-primary',
     'bg-primary-800  hover:bg-primary-900 ': bgColor() === 'bg-primary-800',
     'bg-green-800  hover:bg-green-900 ': bgColor() === 'bg-green-700',
     'bg-alert-800 hover:bg-alert-900 ': bgColor() === 'bg-alert-700',
+    'bg-accent-700 hover:bg-accent-800': bgColor() === 'bg-accent-700',
+    'bg-gray-700  hover:bg-gray-800': bgColor() === 'bg-gray-700',
+    'bg-accent hover:bg-accent-600': bgColor() === 'bg-accent',
     'bg-gray-100  hover:bg-gray-200': !bgColor,
     'text-white': bgColor,
   }"

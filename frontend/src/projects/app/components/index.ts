@@ -11,3 +11,4 @@ export * from './parking-card-availability/parking-card-availability';
 export * from './add-parking-reservation/add-parking-reservation';
 export * from './transactions-table-history/transactions-table-history';
 export * from './empty-history-message/empty-history-message';
+export * from './users-table/users-table';
