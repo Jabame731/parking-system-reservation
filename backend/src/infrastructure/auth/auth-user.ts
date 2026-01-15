@@ -154,7 +154,13 @@ export const loginUserIn = async (
       };
     }
 
-    const accessToken = generateAccessToken(user);
+    const userData = {
+      id: user.id,
+      email: user.email,
+      role: user.userRole,
+    };
+
+    const accessToken = generateAccessToken(userData);
 
     const response: UserResponse = {
       id: user.id,

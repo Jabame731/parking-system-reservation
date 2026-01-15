@@ -12,7 +12,7 @@ export const registerUserController = async (
   res: Response
 ): Promise<void> => {
   const result: Result<SuccessResponse, ErrorResponse> = await registerUserIn(
-    req.body.data
+    req.body
   );
 
   if (!result.success) {
