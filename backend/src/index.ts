@@ -4,6 +4,8 @@ import cors from "cors";
 
 //routes imported
 import authRouter from "./routes/auth/auth.routes";
+import parkingSlotRouter from "./routes/parking/parking.routes";
+import reservationRouter from "./routes/reservation/reservation.routes";
 
 const app = express();
 dotenv.config();
@@ -27,6 +29,12 @@ app.use(express.json());
 
 //Base path for auth
 app.use("/api/auth", authRouter);
+
+//Base path for parking slot
+app.use("/api/parkingSlots", parkingSlotRouter);
+
+//Base path for reservation
+app.use("/api/parkingReservation", reservationRouter);
 
 const port = process.env.PORT;
 
