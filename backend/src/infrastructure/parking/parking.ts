@@ -15,6 +15,21 @@ export const createParkingSlot = async (
   const id = uuidv4();
 
   try {
+    const [slotCheck] = await db.execute(
+      "SELECT * FROM `parking_slot` WHERE `slotName` = ?",
+      [parking.slotName]
+    );
+
+    if ((slotCheck as any[]).length > 0) {
+      return {
+        success: false,
+        error: {
+          errorMessage: "Slot name is already created.",
+          statusCode: 409,
+        },
+      };
+    }
+
     const query =
       "INSERT INTO parking_slot (id, slotName, status, carOccupied, createdBy) VALUES (?, ?, ?, ?, ?)";
 
@@ -74,7 +89,7 @@ export const getAllParkingSlots = async (): Promise<
       success: false,
       error: {
         statusCode: 500,
-        errorMessage: error.message,
+        errorMessage: error instanceof Error ? error.message : String(error),
       },
     };
   }
@@ -106,7 +121,10 @@ export const getParkingSlotById = async (
   } catch (error: any) {
     return {
       success: false,
-      error: { statusCode: 500, errorMessage: error.message },
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
     };
   }
 };
@@ -170,7 +188,10 @@ export const updateParkingSlot = async (
   } catch (error: any) {
     return {
       success: false,
-      error: { statusCode: 500, errorMessage: error.message },
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
     };
   }
 };
@@ -197,7 +218,10 @@ export const deleteParkingSlot = async (
   } catch (error: any) {
     return {
       success: false,
-      error: { statusCode: 500, errorMessage: error.message },
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
     };
   }
 };

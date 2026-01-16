@@ -6,6 +6,7 @@ import cors from "cors";
 import authRouter from "./routes/auth/auth.routes";
 import parkingSlotRouter from "./routes/parking/parking.routes";
 import reservationRouter from "./routes/reservation/reservation.routes";
+import sensorRouter from "./routes/sensor/sensor.routes";
 
 const app = express();
 dotenv.config();
@@ -35,6 +36,9 @@ app.use("/api/parkingSlots", parkingSlotRouter);
 
 //Base path for reservation
 app.use("/api/parkingReservation", reservationRouter);
+
+//Base path for sensor
+app.use("/api/sensor", sensorRouter);
 
 const port = process.env.PORT;
 
