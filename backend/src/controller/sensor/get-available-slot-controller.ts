@@ -19,8 +19,15 @@ export const getAvailableSlotsController = async (
     return;
   }
 
-  res.status(result.data.statusCode).json({
-    message: result.data.message,
-    data: result.data.data,
-  });
+  res
+    .status(result.data.statusCode)
+    .set({
+      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+      Pragma: "no-cache",
+      Expires: "0",
+    })
+    .json({
+      message: result.data.message,
+      data: result.data.data,
+    });
 };
