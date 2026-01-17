@@ -41,3 +41,55 @@ export const getAvailableSlots = async (): Promise<
     };
   }
 };
+
+export const updateSensorSlot = async (payload: {
+  slotId: string;
+  sensorValue: number;
+}): Promise<Result<SuccessResponse, ErrorResponse>> => {
+  const db = connection();
+  try {
+    const { slotId, sensorValue } = payload;
+
+    const sensor = sensorValue === 1;
+
+    const [rows] = await db.execute(
+      `SELECT id FROM parking_slot WHERE slotName = ?`,
+      [slotId]
+    );
+
+    if ((rows as any[]).length === 0) {
+      return {
+        success: false,
+        error: {
+          statusCode: 404,
+          errorMessage: "Parking slot not found",
+        },
+      };
+    }
+
+    await db.execute(
+      `
+        UPDATE parking_slot
+        SET sensorValue = ?, updatedAt = NOW()
+        WHERE slotName = ?
+      `,
+      [sensor, slotId]
+    );
+
+    return {
+      success: true,
+      data: {
+        statusCode: 200,
+        message: "Parking slot updated successfully",
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
+    };
+  }
+};
