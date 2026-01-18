@@ -2,8 +2,9 @@ export interface Parking {
   id: string;
   slotName: string;
   carOccupied: string;
-  status: string;
   sensorValue: number;
+  sensorStatus: string;
+  slotStatus: string;
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;
@@ -12,7 +13,7 @@ export interface Parking {
 export interface CreateParking {
   id: string;
   slotName: string;
-  status: string;
+  slotStatus: string;
   carOccupied: string;
   createdBy: string;
 }

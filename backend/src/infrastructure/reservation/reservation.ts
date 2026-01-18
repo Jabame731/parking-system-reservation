@@ -4,14 +4,14 @@ import { connection } from "../../config/mysql.db";
 import { CreateReservation } from "../../utils/models/reservation.model";
 
 export const createReservation = async (
-  payload: CreateReservation
+  payload: CreateReservation,
 ): Promise<Result<SuccessResponse, ErrorResponse>> => {
   const db = connection();
 
   try {
     const [slotRows]: any = await db.query(
       `SELECT status FROM parking_slot WHERE id = ? FOR UPDATE`,
-      [payload.slotId]
+      [payload.slotId],
     );
 
     if (slotRows.length === 0) {
@@ -25,7 +25,7 @@ export const createReservation = async (
       };
     }
 
-    if (slotRows[0].status !== "AVAILABLE") {
+    if (slotRows[0].slotStatus !== "AVAILABLE") {
       await db.rollback();
       return {
         success: false,
@@ -55,7 +55,7 @@ export const createReservation = async (
         payload.amount,
         payload.paymentMethod ?? null,
         payload.paymentStatus ?? "PENDING",
-      ]
+      ],
     );
 
     await db.query(
@@ -66,7 +66,7 @@ export const createReservation = async (
         status = 'OCCUPIED'
       WHERE id = ?
       `,
-      [payload.licensePlate, payload.slotId]
+      [payload.licensePlate, payload.slotId],
     );
 
     await db.query(
@@ -75,7 +75,7 @@ export const createReservation = async (
       SET carType = ?
       WHERE licensePlate = ?
       `,
-      [payload.carType ?? null, payload.licensePlate]
+      [payload.carType ?? null, payload.licensePlate],
     );
 
     return {

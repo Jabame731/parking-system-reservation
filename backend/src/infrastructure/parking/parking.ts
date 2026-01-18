@@ -8,7 +8,7 @@ import {
 } from "../../utils";
 
 export const createParkingSlot = async (
-  parking: CreateParking
+  parking: CreateParking,
 ): Promise<Result<SuccessResponse<Partial<Parking>>, ErrorResponse>> => {
   const db = connection();
   const { v4: uuidv4 } = await import("uuid");
@@ -17,7 +17,7 @@ export const createParkingSlot = async (
   try {
     const [slotCheck] = await db.execute(
       "SELECT * FROM `parking_slot` WHERE `slotName` = ?",
-      [parking.slotName]
+      [parking.slotName],
     );
 
     if ((slotCheck as any[]).length > 0) {
@@ -31,12 +31,12 @@ export const createParkingSlot = async (
     }
 
     const query =
-      "INSERT INTO parking_slot (id, slotName, status, carOccupied, createdBy) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO parking_slot (id, slotName, slotStatus, carOccupied, createdBy) VALUES (?, ?, ?, ?, ?)";
 
     await db.execute(query, [
       id,
       parking.slotName,
-      parking.status,
+      parking.slotStatus,
       parking.carOccupied,
       parking.createdBy,
     ]);
@@ -44,7 +44,7 @@ export const createParkingSlot = async (
     const response: Partial<Parking> = {
       id,
       slotName: parking.slotName,
-      status: parking.status,
+      slotStatus: parking.slotStatus,
       carOccupied: parking.carOccupied,
       createdBy: parking.createdBy,
     };
@@ -96,13 +96,13 @@ export const getAllParkingSlots = async (): Promise<
 };
 
 export const getParkingSlotById = async (
-  slotId: string
+  slotId: string,
 ): Promise<Result<SuccessResponse<Parking>, ErrorResponse>> => {
   const db = connection();
   try {
     const [rows]: any = await db.execute(
       "SELECT * FROM parking_lot WHERE id = ?",
-      [slotId]
+      [slotId],
     );
     if (rows.length === 0) {
       return {
@@ -130,7 +130,7 @@ export const getParkingSlotById = async (
 };
 
 export const updateParkingSlot = async (
-  parking: Partial<Parking>
+  parking: Partial<Parking>,
 ): Promise<Result<SuccessResponse, ErrorResponse>> => {
   const db = connection();
 
@@ -138,7 +138,7 @@ export const updateParkingSlot = async (
     if (
       parking.slotName === undefined &&
       parking.carOccupied === undefined &&
-      parking.status === undefined
+      parking.slotStatus === undefined
     ) {
       return {
         success: false,
@@ -163,7 +163,7 @@ export const updateParkingSlot = async (
     const [result]: any = await db.execute(query, [
       parking.slotName ?? null,
       parking.carOccupied ?? null,
-      parking.status ?? null,
+      parking.slotStatus ?? null,
       updatedAt,
       parking.id,
     ]);
@@ -197,13 +197,13 @@ export const updateParkingSlot = async (
 };
 
 export const deleteParkingSlot = async (
-  id: string
+  id: string,
 ): Promise<Result<SuccessResponse, ErrorResponse>> => {
   const db = connection();
   try {
     const [result]: any = await db.execute(
       "DELETE FROM parking_lot WHERE id = ?",
-      [id]
+      [id],
     );
     if (result.affectedRows === 0) {
       return {

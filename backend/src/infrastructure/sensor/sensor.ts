@@ -18,7 +18,7 @@ export const getAvailableSlots = async (): Promise<
             WHERE status = 'Active'
             ORDER BY slotName
 
-        `
+        `,
     );
 
     const slotNames = (rows as Parking[]).map((r: Parking) => r.slotName);
@@ -42,6 +42,11 @@ export const getAvailableSlots = async (): Promise<
   }
 };
 
+/**
+ *
+ * @param payload id and value of the parking slot
+ * @returns success message once the function is valid
+ */
 export const updateSensorSlot = async (payload: {
   slotId: string;
   sensorValue: number;
@@ -54,7 +59,7 @@ export const updateSensorSlot = async (payload: {
 
     const [rows] = await db.execute(
       `SELECT id FROM parking_slot WHERE slotName = ?`,
-      [slotId]
+      [slotId],
     );
 
     if ((rows as any[]).length === 0) {
@@ -73,7 +78,7 @@ export const updateSensorSlot = async (payload: {
         SET sensorValue = ?, updatedAt = NOW()
         WHERE slotName = ?
       `,
-      [sensor, slotId]
+      [sensor, slotId],
     );
 
     return {
