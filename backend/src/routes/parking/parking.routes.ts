@@ -16,7 +16,12 @@ router.get("/:id", getParkingSlotByIdController);
 
 // Protected Admin routes
 router.post("/", verifyToken, verifyAdmin, createParkingSlotController);
-router.put("/:id", verifyToken, verifyAdmin, updateParkingSlotController);
+router.put(
+  "/updateSlot",
+  verifyToken,
+  verifyAdmin,
+  updateParkingSlotController,
+);
 router.delete("/:id", verifyToken, verifyAdmin, deleteParkingSlotController);
 
 export default router;

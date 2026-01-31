@@ -29,9 +29,16 @@
 </div>
 
 <div class="mt-4">
-  <app-parking-card-availability
-    (handleReservation)="handleAddReservation($event)"
-  ></app-parking-card-availability>
+  @if (loading()) {
+    <div class="flex justify-center items-center h-48">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    <app-parking-card-availability
+      [slots]="parkingSlotData() | parkingSlotItems"
+      (handleReservation)="handleAddReservation($event)"
+    ></app-parking-card-availability>
+  }
 </div>
 
 <ng-container *cdkPortal>

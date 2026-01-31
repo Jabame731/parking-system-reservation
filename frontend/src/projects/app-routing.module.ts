@@ -1,6 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { Auth, Dashboard, Parking, Shell, Transactions, Users } from './app/container';
 import { NgModule } from '@angular/core';
+import { ParkingSlotGuard } from './app/guards';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,7 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: Parking,
+        canActivate: [ParkingSlotGuard],
         title: 'Parking Slot',
       },
       {

@@ -23,10 +23,11 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-  })
+  }),
 );
 
 app.use(express.json());
+app.set("etag", false);
 
 //Base path for auth
 app.use("/api/auth", authRouter);

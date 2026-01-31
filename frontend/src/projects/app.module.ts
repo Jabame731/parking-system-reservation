@@ -52,6 +52,7 @@ const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
       metaReducers,
     }),
     EffectsModule.forRoot([]),
+    extModules,
   ],
   providers: [
     provideAppInitializer(() => new Promise((resolve) => setTimeout(resolve))),

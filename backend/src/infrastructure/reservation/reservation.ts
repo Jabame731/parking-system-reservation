@@ -63,7 +63,7 @@ export const createReservation = async (
       UPDATE parking_slot
       SET
         carOccupied = ?,
-        status = 'OCCUPIED'
+        slotStatus = 'RESERVED'
       WHERE id = ?
       `,
       [payload.licensePlate, payload.slotId],

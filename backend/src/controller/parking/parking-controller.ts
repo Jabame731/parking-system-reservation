@@ -10,7 +10,7 @@ import {
 
 export const createParkingSlotController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const result: Result<
     SuccessResponse<Partial<Parking>>,
@@ -33,7 +33,7 @@ export const createParkingSlotController = async (
 
 export const getAllParkingSlotsController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const result: Result<
     SuccessResponse<Parking[]>,
@@ -56,9 +56,9 @@ export const getAllParkingSlotsController = async (
 
 export const getParkingSlotByIdController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
-  const slot = req.query.slotId;
+  const slot = req.params.id;
   if (!slot || typeof slot !== "string") {
     res.status(400).json({
       error: 'Missing or invalid "parking slot" query parameter',
@@ -87,7 +87,7 @@ export const getParkingSlotByIdController = async (
 
 export const updateParkingSlotController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const result: Result<SuccessResponse, ErrorResponse> =
     await updateParkingSlot(req.body);
@@ -108,7 +108,7 @@ export const updateParkingSlotController = async (
 
 export const deleteParkingSlotController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const result: Result<SuccessResponse, ErrorResponse> =
     await deleteParkingSlot(req.body);
