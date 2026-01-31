@@ -56,6 +56,7 @@ export const updateSensorSlot = async (payload: {
     const { slotId, sensorValue } = payload;
 
     const sensor = sensorValue === 1;
+    const status = sensorValue === 1 ? "OCCUPIED" : "AVAILABLE";
 
     const [rows] = await db.execute(
       `SELECT id FROM parking_slot WHERE slotName = ?`,
@@ -75,10 +76,10 @@ export const updateSensorSlot = async (payload: {
     await db.execute(
       `
         UPDATE parking_slot
-        SET sensorValue = ?, updatedAt = NOW()
+        SET sensorValue = ?, slotStatus = ? updatedAt = NOW()
         WHERE slotName = ?
       `,
-      [sensor, slotId],
+      [sensor, status, slotId],
     );
 
     return {

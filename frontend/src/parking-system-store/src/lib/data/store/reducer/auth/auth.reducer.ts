@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { UserResponseModel } from '../../../models';
-import * as fromAuth from '../../actions/auth.action';
+import * as fromAuth from '../../actions/auth/auth.actions';
 
 export const authFeatureKey = 'authz';
 
@@ -90,5 +90,5 @@ export const initialAuthReducer = createReducer(
   }),
   on(fromAuth.logoutAttempted, () => ({
     ...initialAuthState,
-  }))
+  })),
 );

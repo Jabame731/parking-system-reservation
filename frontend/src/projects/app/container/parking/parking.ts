@@ -9,16 +9,33 @@ import {
   ParkingCardAvailability,
   ParkingCardStatus,
 } from 'projects/app/components';
+import { ParkingUsecase } from '@parking-system-store/lib/usecases';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ParkingSlotItemsPipe } from 'projects/app/pipe';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ParkingSlotConverted } from '../../models';
 
 @Component({
   selector: 'app-parking',
-  imports: [CdkPortal, CommonModule, ParkingCardStatus, MatIcon, ParkingCardAvailability],
+  imports: [
+    CdkPortal,
+    CommonModule,
+    ParkingCardStatus,
+    MatIcon,
+    ParkingCardAvailability,
+    ParkingSlotItemsPipe,
+    MatProgressSpinner,
+  ],
   templateUrl: './parking.html',
   styleUrl: './parking.scss',
 })
 export class Parking implements OnInit, OnDestroy {
   private pageTitlePortal = inject(PageTitlePortal);
+  private parkingUsecase = inject(ParkingUsecase);
   private dialog = inject(MatDialog);
+
+  parkingSlotData = toSignal(this.parkingUsecase.parkingData$);
+  loading = toSignal(this.parkingUsecase.loading$);
 
   @ViewChild(CdkPortal) pageTitle!: CdkPortal;
 
@@ -28,8 +45,12 @@ export class Parking implements OnInit, OnDestroy {
     });
   }
 
-  handleAddReservation(data: any) {
-    this.dialog.open(AddParkingReservation);
+  handleAddReservation(data: { slot: ParkingSlotConverted }) {
+    this.dialog.open(AddParkingReservation, {
+      data: {
+        slot: data.slot,
+      },
+    });
   }
 
   ngOnDestroy(): void {

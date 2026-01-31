@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { AuthRepository } from '../../../repositories/index';
 import { Router } from '@angular/router';
-import * as fromAuth from '../../actions/auth.action';
+import * as fromAuth from '../../actions/auth/auth.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { UserResponseModel } from '@parking-system-store/lib/data/models';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -29,9 +29,9 @@ export class AuthEffects {
               duration: 5 * 1000,
             });
             return of(fromAuth.initiateLoginFailed({ email, password, error }));
-          })
+          }),
         );
-      })
+      }),
     );
   });
 
@@ -59,9 +59,9 @@ export class AuthEffects {
               duration: 5 * 1000,
             });
             return of(fromAuth.initiateRegisterFailed({ error }));
-          })
+          }),
         );
-      })
+      }),
     );
   });
 
@@ -72,8 +72,8 @@ export class AuthEffects {
         tap(() => {
           localStorage.clear();
           this.router.navigate(['/auth']);
-        })
+        }),
       ),
-    { dispatch: false }
+    { dispatch: false },
   );
 }

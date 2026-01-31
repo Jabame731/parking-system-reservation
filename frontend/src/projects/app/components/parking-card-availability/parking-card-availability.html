@@ -1,5 +1,5 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-  @for (slot of slots; track slot.id) {
+  @for (slot of slots(); track slot.id) {
     <div
       class="h-48 rounded-xl border-2 flex flex-col justify-between p-4 transition select-none"
       [ngClass]="{
@@ -37,7 +37,7 @@
         </mat-icon>
       </div>
 
-      <div class="text-center font-semibold text-xl">{{ slot.id }}</div>
+      <div class="text-center font-semibold text-xl">{{ slot.name }}</div>
       <div class="text-center text-sm font-medium">
         {{ slot.status | titlecase }}
       </div>
