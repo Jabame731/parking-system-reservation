@@ -15,7 +15,7 @@ export const getAvailableSlots = async (): Promise<
       `
             SELECT slotName
             FROM parking_slot
-            WHERE status = 'Active'
+            WHERE slotStatus = 'Active'
             ORDER BY slotName
 
         `,
