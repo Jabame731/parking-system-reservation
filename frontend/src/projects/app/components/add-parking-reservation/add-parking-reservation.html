@@ -12,6 +12,7 @@
           ngModel
           required
           #resDate="ngModel"
+          [min]="minDate()"
         />
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
@@ -25,6 +26,7 @@
         <input
           matInput
           [matTimepicker]="startTimePicker"
+          [min]="minTime"
           name="startTime"
           ngModel
           required
@@ -38,7 +40,7 @@
       </mat-form-field>
     </div>
 
-    <div class="mt-5">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
       <mat-form-field class="w-full" hideRequiredMarker>
         <mat-label>Car plate number</mat-label>
         <input matInput name="carPlate" ngModel required minlength="5" #carPlate="ngModel" />
@@ -47,14 +49,44 @@
           <mat-error>Plate is required</mat-error>
         }
       </mat-form-field>
+
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>Car Type</mat-label>
+        <mat-select ngModel name="carType" required>
+          @for (carType of carTypes; track carType) {
+            <mat-option [value]="carType.value">{{ carType.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="mt-5">
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>Payment Method</mat-label>
+        <mat-select [(ngModel)]="selectedValue" name="payment" required>
+          @for (payment of payments; track payment) {
+            <mat-option [value]="payment.value">{{ payment.viewValue }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint class="text-red">Parking may be charged at 25 pesos per day.</mat-hint>
+      </mat-form-field>
     </div>
   </div>
 
   <div mat-dialog-actions class="p-4 flex gap-2">
-    <button mat-stroked-button mat-dialog-close color="warn" type="button">Cancel</button>
+    <button
+      mat-stroked-button
+      mat-dialog-close
+      color="warn"
+      type="button"
+      (click)="onCancelClick()"
+    >
+      Cancel
+    </button>
     <app-submit-button
       [isDisabled]="addReservation.invalid || addReservation.pending!"
-      text="Add Parking Reservation"
+      [isLoading]="submitting$ | async"
+      text="Add Reservation"
       icon="event_upcoming"
       color="primary"
       type="submit"

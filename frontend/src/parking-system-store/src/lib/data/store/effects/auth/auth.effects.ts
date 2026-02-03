@@ -65,6 +65,21 @@ export class AuthEffects {
     );
   });
 
+  navigateAfterSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(fromAuth.initiateLoginSucceeded),
+        tap(({ data }) => {
+          if (data.attributes.userRole === 'admin') {
+            this.router.navigate(['/analytics']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
+        }),
+      ),
+    { dispatch: false },
+  );
+
   logout$ = createEffect(
     () =>
       this.actions$.pipe(

@@ -12,7 +12,7 @@ import {
 import bcrypt from "bcryptjs";
 
 export const registerUserIn = async (
-  user: RegisterUser
+  user: RegisterUser,
 ): Promise<Result<SuccessResponse, ErrorResponse>> => {
   const db = connection();
 
@@ -45,7 +45,7 @@ export const registerUserIn = async (
 
     const [emailCheck] = await db.execute(
       "SELECT * FROM `users` WHERE `email` = ?",
-      [user.email]
+      [user.email],
     );
 
     if ((emailCheck as any[]).length > 0) {
@@ -75,7 +75,7 @@ export const registerUserIn = async (
         user.email,
         hash,
         role,
-      ]
+      ],
     );
 
     const insertResult = result as ResultSetHeader;
@@ -109,7 +109,7 @@ export const registerUserIn = async (
 };
 
 export const loginUserIn = async (
-  data: User
+  data: User,
 ): Promise<Result<SuccessResponse<UserResponse>, ErrorResponse>> => {
   const db = connection();
 
@@ -164,7 +164,7 @@ export const loginUserIn = async (
 
     const response: UserResponse = {
       id: user.id,
-      type: "User",
+      type: user.userRole[0]?.toUpperCase() + user.userRole.slice(1),
       attributes: {
         firstName: user.firstName,
         lastName: user.lastName,

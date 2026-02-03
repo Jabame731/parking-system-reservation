@@ -52,6 +52,8 @@ export class Shell {
 
   getAuthFullName$ = this.authUsecase.getAuthFullName$;
 
+  userRole$ = this.authUsecase.userRole$;
+
   smallerScreens = computed(() => {
     return this.breakPoint()?.matches;
   });
@@ -123,32 +125,37 @@ export class Shell {
   }
 
   //hardcoded for now
-  currentMenuItems = [
-    // DASHBOARD
-    // {
-    //   label: 'Dashboard',
-    //   icon: 'dashboard',
-    //   routerLink: ['/dashboard'],
-    // },
+  private readonly currentMenuItems = [
     {
       label: 'Dashboard',
       icon: 'dashboard',
       routerLink: ['/analytics'],
+      roles: ['admin'],
     },
     {
       label: 'Users',
       icon: 'person',
       routerLink: ['/users'],
+      roles: ['admin'],
     },
     {
       label: 'Parking Slot',
       icon: 'garage',
       routerLink: ['/dashboard'],
+      roles: ['admin', 'user'],
     },
     {
       label: 'Transactions',
       icon: 'history',
       routerLink: ['/history'],
+      roles: ['admin', 'user'],
     },
   ];
+
+  userRole = toSignal(this.userRole$, { initialValue: 'user' });
+
+  filteredMenuItems = computed(() => {
+    const role = this.userRole()!;
+    return this.currentMenuItems.filter((item) => item.roles.includes(role));
+  });
 }

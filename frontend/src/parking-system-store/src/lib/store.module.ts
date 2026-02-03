@@ -10,8 +10,10 @@ import { EffectsModule } from '@ngrx/effects';
     CommonModule,
     StoreModule.forFeature(fromStore.authFeatureKey, fromStore.initialAuthReducer),
     StoreModule.forFeature(fromStore.parkingFeatureKey, fromStore.initialParkingReducer),
+    StoreModule.forFeature(fromStore.reservationFeatureKey, fromStore.initiateReservationReducer),
     EffectsModule.forFeature([fromStore.AuthEffects]),
     EffectsModule.forFeature([fromStore.ParkingEffects]),
+    EffectsModule.forFeature([fromStore.ReservationEffects]),
   ],
 })
 export class ParkingSystemStoreModule {}

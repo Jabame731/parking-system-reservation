@@ -37,6 +37,7 @@
     "@ngrx/store-devtools": "^21.0.1",
     "@swimlane/ngx-charts": "^23.1.0",
     "@tailwindcss/postcss": "^4.1.18",
+    "date-fns": "^4.1.0",
     "ngrx-store-localstorage": "^20.0.0",
     "ngx-interactive-org-chart": "^1.3.0",
     "postcss": "^8.5.6",

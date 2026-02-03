@@ -24,7 +24,7 @@
     <app-sidenav
       [canClose]="!smallerScreens()"
       [isExpanded]="isExpanded() || smallerScreens()"
-      [menuItems]="currentMenuItems"
+      [menuItems]="filteredMenuItems()"
       (toggleExpansion)="toggleExpansion()"
     ></app-sidenav>
   </mat-drawer>

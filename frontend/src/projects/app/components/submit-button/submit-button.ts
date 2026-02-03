@@ -18,7 +18,7 @@ export class SubmitButton {
 
   isHandset = input<boolean>(false);
 
-  isLoading = input<boolean>(false);
+  isLoading = input<boolean | null>(false);
 
   icon = input<string>();
 

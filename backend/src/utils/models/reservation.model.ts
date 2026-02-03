@@ -9,4 +9,5 @@ export interface CreateReservation {
   amount: number;
   paymentMethod?: string;
   paymentStatus?: string;
+  reservationDate?: Date;
 }

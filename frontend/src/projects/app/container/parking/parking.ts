@@ -1,4 +1,12 @@
-import { Component, inject, OnDestroy, OnInit, ViewChild, viewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  viewChild,
+} from '@angular/core';
 import { CdkPortal } from '@angular/cdk/portal';
 import { PageTitlePortal } from 'projects/app/services';
 import { CommonModule } from '@angular/common';
@@ -9,11 +17,16 @@ import {
   ParkingCardAvailability,
   ParkingCardStatus,
 } from 'projects/app/components';
-import { ParkingUsecase } from '@parking-system-store/lib/usecases';
+import {
+  AuthUsecase,
+  ParkingUsecase,
+  ReservationUsecase,
+} from '@parking-system-store/lib/usecases';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ParkingSlotItemsPipe } from 'projects/app/pipe';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ParkingSlotConverted } from '../../models';
+import { CreateReservation } from '@parking-system-store/public-api';
 
 @Component({
   selector: 'app-parking',
@@ -32,10 +45,17 @@ import { ParkingSlotConverted } from '../../models';
 export class Parking implements OnInit, OnDestroy {
   private pageTitlePortal = inject(PageTitlePortal);
   private parkingUsecase = inject(ParkingUsecase);
+  private authUsecase = inject(AuthUsecase);
+  private reservationUsecase = inject(ReservationUsecase);
   private dialog = inject(MatDialog);
 
   parkingSlotData = toSignal(this.parkingUsecase.parkingData$);
   loading = toSignal(this.parkingUsecase.loading$);
+  authProfile = toSignal(this.authUsecase.authProfile$);
+
+  userId = computed(() => {
+    return this.authProfile()?.id;
+  });
 
   @ViewChild(CdkPortal) pageTitle!: CdkPortal;
 
@@ -49,7 +69,32 @@ export class Parking implements OnInit, OnDestroy {
     this.dialog.open(AddParkingReservation, {
       data: {
         slot: data.slot,
+        onSubmit: this.addReservation.bind(this),
       },
+    });
+  }
+
+  addReservation({
+    data,
+    onSuccess,
+    onFailure,
+  }: {
+    data: CreateReservation;
+    onSuccess: () => void;
+    onFailure: (errors: { errorMsg: string }) => void;
+  }) {
+    const reservationData = {
+      ...data,
+      userId: this.userId()!,
+    };
+
+    console.log(onSuccess());
+
+    this.reservationUsecase.addReservation(reservationData, {
+      onSuccess: () => {
+        onSuccess();
+      },
+      onFailure,
     });
   }
 

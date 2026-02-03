@@ -1,16 +1,17 @@
 import { RouterModule, Routes } from '@angular/router';
 import { Auth, Dashboard, Parking, Shell, Transactions, Users } from './app/container';
 import { NgModule } from '@angular/core';
-import { ParkingSlotGuard } from './app/guards';
+import { AuthGuardFn, ParkingSlotGuard, VerifyAuthenticatedGuardFn } from './app/guards';
 
 export const routes: Routes = [
   {
     path: '',
     component: Shell,
+    canActivate: [AuthGuardFn],
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'analytics',
         pathMatch: 'full',
       },
       //admin only
@@ -41,8 +42,9 @@ export const routes: Routes = [
   {
     path: 'auth',
     component: Auth,
-    canActivate: [],
+    canActivate: [VerifyAuthenticatedGuardFn],
   },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
