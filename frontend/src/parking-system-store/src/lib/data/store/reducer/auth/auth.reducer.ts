@@ -47,6 +47,7 @@ export const initialAuthReducer = createReducer(
       loaded: true,
       loading: false,
       error: null,
+      isAuthenticated: true,
     };
   }),
   on(fromAuth.initiateLoginFailed, (state, { email, password, error }) => {

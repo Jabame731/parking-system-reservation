@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { Parking } from '../../../models';
 import * as fromParking from '../../actions/parking/parking.actions';
+import * as fromReservation from '../../actions/reservation/reservation.actions';
 
 export const parkingFeatureKey = 'parking';
 
@@ -8,6 +9,8 @@ export interface ParkingState {
   data?: Parking[];
   loading: boolean;
   loaded: boolean;
+  reservationAddLoading?: boolean;
+  reservationAddSuccess?: boolean;
   error: null | string;
 }
 
@@ -43,6 +46,23 @@ export const initialParkingReducer = createReducer(
       loading: false,
       loaded: false,
       error: error,
+    };
+  }),
+  on(fromReservation.addParkingReservationSucceeded, (state, { reservation, response }) => {
+    return {
+      ...state,
+      reservationAddLoading: false,
+      reservationAddSuccess: true,
+      data: state.data?.map((slot) => {
+        if (slot.id === reservation.slotId) {
+          return {
+            ...slot,
+            slotStatus: 'RESERVED',
+          };
+        }
+
+        return slot;
+      }),
     };
   }),
 );

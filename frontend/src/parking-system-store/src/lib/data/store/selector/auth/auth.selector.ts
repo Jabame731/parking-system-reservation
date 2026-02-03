@@ -6,41 +6,48 @@ export const selectAuthState = createFeatureSelector<fromAuth.AuthState>(fromAut
 
 export const getAuthProfile = createSelector(
   selectAuthState,
-  (state: fromAuth.AuthState) => state && state.data
+  (state: fromAuth.AuthState) => state && state.data,
 );
 
 export const isLoading = createSelector(
   selectAuthState,
-  (state: fromAuth.AuthState) => state.loading
+  (state: fromAuth.AuthState) => state.loading,
 );
 
 export const authError = createSelector(
   selectAuthState,
-  (state: fromAuth.AuthState) => state?.error
+  (state: fromAuth.AuthState) => state?.error,
 );
 
 export const getAuthenticated = createSelector(selectAuthState, (state) => state.isAuthenticated);
 
+export const userRole = createSelector(
+  selectAuthState,
+  (state) => state.data?.attributes?.userRole,
+);
+
 //register slice
 export const isRegisterLoading = createSelector(
   selectAuthState,
-  (state: fromAuth.AuthState) => state.registerLoading
+  (state: fromAuth.AuthState) => state.registerLoading,
 );
 
 export const isRegisterSucceeded = createSelector(
   selectAuthState,
-  (state: fromAuth.AuthState) => state.registerSucceeced
+  (state: fromAuth.AuthState) => state.registerSucceeced,
 );
 
 export const getSuccessRegisterMessage = createSelector(
   selectAuthState,
-  (state: fromAuth.AuthState) => state.registerSuccessMessage
+  (state: fromAuth.AuthState) => state.registerSuccessMessage,
 );
 
 export const getRegisterErrorMessage = createSelector(
   selectAuthState,
-  (state: fromAuth.AuthState) => state.registerError
+  (state: fromAuth.AuthState) => state.registerError,
 );
+
+export const getAccessToken = createSelector(selectAuthState, (state) => state.data?.accessToken);
 
 export const getUserName = createSelector(getAuthProfile, (user: UserResponseModel | undefined) => {
   if (user) {

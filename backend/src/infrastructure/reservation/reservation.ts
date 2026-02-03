@@ -7,10 +7,12 @@ export const createReservation = async (
   payload: CreateReservation,
 ): Promise<Result<SuccessResponse, ErrorResponse>> => {
   const db = connection();
+  const { v4: uuidv4 } = await import("uuid");
+  const id = uuidv4();
 
   try {
     const [slotRows]: any = await db.query(
-      `SELECT status FROM parking_slot WHERE id = ? FOR UPDATE`,
+      `SELECT slotStatus FROM parking_slot WHERE id = ? FOR UPDATE`,
       [payload.slotId],
     );
 
@@ -37,15 +39,23 @@ export const createReservation = async (
     }
 
     await db.query(
+      `INSERT INTO vehicle (licensePlate, carType, ownerId) 
+        VALUES (?, ?, ?) 
+        ON DUPLICATE KEY UPDATE 
+        carType = VALUES(carType),
+        ownerId = VALUES(ownerId)`,
+      [payload.licensePlate, payload.carType ?? null, payload.userId],
+    );
+    await db.query(
       `
       INSERT INTO reservation (
         id, slotId, userId, licensePlate, carType,
-        startTime, endTime, amount, paymentMethod, paymentStatus
+        startTime, endTime, amount, paymentMethod, paymentStatus, reservationDate
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
-        payload.id,
+        id,
         payload.slotId,
         payload.userId,
         payload.licensePlate,
@@ -55,6 +65,7 @@ export const createReservation = async (
         payload.amount,
         payload.paymentMethod ?? null,
         payload.paymentStatus ?? "PENDING",
+        payload.reservationDate,
       ],
     );
 
@@ -67,15 +78,6 @@ export const createReservation = async (
       WHERE id = ?
       `,
       [payload.licensePlate, payload.slotId],
-    );
-
-    await db.query(
-      `
-      UPDATE vehicle
-      SET carType = ?
-      WHERE licensePlate = ?
-      `,
-      [payload.carType ?? null, payload.licensePlate],
     );
 
     return {

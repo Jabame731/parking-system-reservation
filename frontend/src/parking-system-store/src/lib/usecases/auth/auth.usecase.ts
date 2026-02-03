@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as fromStore from '../../data/store';
 import { RegisterUserData } from '../../data/models';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,8 @@ export class AuthUsecase {
 
   isAuthenticated$ = this.store.pipe(select(fromStore.getAuthenticated));
 
+  userRole$ = this.store.pipe(select(fromStore.userRole));
+
   getAuthFullName$ = this.store.pipe(select(fromStore.getUserName));
 
   //register
@@ -28,12 +31,15 @@ export class AuthUsecase {
 
   getRegisterErrorMessage$ = this.store.pipe(select(fromStore.getRegisterErrorMessage));
 
+  //token
+  getAccessToken$ = this.store.pipe(select(fromStore.getAccessToken));
+
   login(email: string, password: string) {
     this.store.dispatch(
       fromStore.initiateLoginAttempted({
         email,
         password,
-      })
+      }),
     );
   }
 
@@ -43,5 +49,9 @@ export class AuthUsecase {
 
   logOut() {
     this.store.dispatch(fromStore.logoutAttempted());
+  }
+
+  getAccessToken(): Observable<string | undefined> {
+    return this.store.select(fromStore.getAccessToken);
   }
 }

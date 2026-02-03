@@ -8,10 +8,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { MetaReducer, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { reducers } from '@parking-system-store/lib/data/store/reducer/meta/meta-reducer.reducer';
 import { ParkingSystemStoreModule } from '@parking-system-store/lib/store.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TokenInterceptor } from '@parking-system-store/lib/data/interceptors';
 
 export const extModules = [
   StoreDevtoolsModule.instrument({
@@ -55,6 +56,11 @@ const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
     extModules,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true,
+    },
     provideAppInitializer(() => new Promise((resolve) => setTimeout(resolve))),
     provideHttpClient(withInterceptorsFromDi()),
   ],
