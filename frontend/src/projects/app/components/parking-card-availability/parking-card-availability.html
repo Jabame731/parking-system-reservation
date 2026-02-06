@@ -1,31 +1,38 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
   @for (slot of slots(); track slot.id) {
     <div
-      class="h-48 rounded-xl border-2 flex flex-col justify-between p-4 transition select-none"
-      [ngClass]="{
-        '!bg-green-50 !border-green-600 !text-green-700 cursor-pointer hover:!bg-green-100':
-          slot.status === 'available',
-
-        '!bg-red-50 !border-red-500 !text-red-700 opacity-60 pointer-events-none':
-          slot.status === 'occupied',
-
-        '!bg-yellow-50 !border-yellow-500 !text-yellow-600 opacity-60 pointer-events-none':
-          slot.status === 'reserved',
-
-        '!bg-gray-200 !border-gray-400 !text-gray-600 opacity-60 pointer-events-none':
-          slot.status === 'maintenance',
-      }"
-      (click)="slot.status === 'available' && onSlotClick(slot)"
+      class="h-55 rounded-xl border-2 flex flex-col justify-between p-4 transition select-none"
+      [class.!bg-green-50]="slot.status === 'available'"
+      [class.!border-green-600]="slot.status === 'available'"
+      [class.!text-green-700]="slot.status === 'available'"
+      [class.cursor-pointer]="slot.status === 'available'"
+      [class.hover:!bg-green-100]="slot.status === 'available'"
+      [class.!bg-red-50]="slot.status === 'occupied'"
+      [class.!border-red-500]="slot.status === 'occupied'"
+      [class.!text-red-700]="slot.status === 'occupied'"
+      [class.!bg-yellow-50]="slot.status === 'reserved'"
+      [class.!border-yellow-500]="slot.status === 'reserved'"
+      [class.!text-yellow-600]="slot.status === 'reserved'"
+      [class.!bg-gray-200]="slot.status === 'maintenance'"
+      [class.!border-gray-400]="slot.status === 'maintenance'"
+      [class.!text-gray-600]="slot.status === 'maintenance'"
+      [class.opacity-60]="
+        slot.status !== 'available' && (slot.status !== 'reserved' || slot.isPaid)
+      "
+      [class.pointer-events-none]="
+        slot.status === 'occupied' ||
+        slot.status === 'maintenance' ||
+        (slot.status === 'reserved' && slot.isPaid)
+      "
+      (click)="slot.status !== 'reserved' ? onSlotClick(slot) : null"
     >
       <div class="flex justify-center mt-3">
         <mat-icon
           class="icon-display"
-          [ngClass]="{
-            '!text-green-600': slot.status === 'available',
-            '!text-red-500': slot.status === 'occupied',
-            '!text-yellow-500': slot.status === 'reserved',
-            '!text-gray-500': slot.status === 'maintenance',
-          }"
+          [class.!text-green-600]="slot.status === 'available'"
+          [class.!text-red-500]="slot.status === 'occupied'"
+          [class.!text-yellow-500]="slot.status === 'reserved'"
+          [class.!text-gray-500]="slot.status === 'maintenance'"
         >
           {{
             slot.status === 'occupied'
@@ -38,6 +45,7 @@
       </div>
 
       <div class="text-center font-semibold text-xl">{{ slot.name }}</div>
+
       <div class="text-center text-sm font-medium">
         {{ slot.status | titlecase }}
       </div>
@@ -45,6 +53,12 @@
       @if (slot.plate) {
         <div class="text-xs text-center opacity-80">
           {{ slot.plate }}
+        </div>
+      }
+
+      @if (slot.status === 'reserved' && !slot.isPaid && slot.userId === userId()) {
+        <div class="mt-2 pointer-events-auto">
+          <app-paypal-reservation-button [slot]="slot" />
         </div>
       }
     </div>

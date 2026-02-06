@@ -5,7 +5,7 @@ import { CreateReservation } from "../../utils/models/reservation.model";
 
 export const createReservation = async (
   payload: CreateReservation,
-): Promise<Result<SuccessResponse, ErrorResponse>> => {
+): Promise<Result<SuccessResponse<{ id: string }>, ErrorResponse>> => {
   const db = connection();
   const { v4: uuidv4 } = await import("uuid");
   const id = uuidv4();
@@ -85,6 +85,7 @@ export const createReservation = async (
       data: {
         statusCode: 201,
         message: "Reservation created successfully",
+        data: { id },
       },
     };
   } catch (error: any) {

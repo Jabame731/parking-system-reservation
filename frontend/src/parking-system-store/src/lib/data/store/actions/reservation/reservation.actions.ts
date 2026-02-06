@@ -13,5 +13,5 @@ export const addParkingReservationFailed = createAction(
 
 export const addParkingReservationSucceeded = createAction(
   '[Reservation] Add Parking Reservation Succeeded',
-  props<{ response: string; reservation: CreateReservation }>(),
+  props<{ reservationId: string; reservation: CreateReservation }>(),
 );

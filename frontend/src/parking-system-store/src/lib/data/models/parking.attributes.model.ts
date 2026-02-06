@@ -1,3 +1,5 @@
+import { PaymentResult } from './reservation.attributes';
+
 export interface Parking {
   id: string;
   slotName: string;
@@ -7,6 +9,10 @@ export interface Parking {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  isPaid: boolean;
+  paymentResult?: PaymentResult;
+  reservationId?: string;
+  userId?: string;
 }
 
 export interface CreateParking {

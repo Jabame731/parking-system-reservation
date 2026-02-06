@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, signal } from '@angular/core';
+import { Component, Inject, signal } from '@angular/core';
 import {
   MatDialogContent,
   MatDialogActions,
@@ -49,7 +49,6 @@ export interface ParkingModalData {
     ReactiveFormsModule,
     MatTimepickerModule,
     MatInputModule,
-    JsonPipe,
     MatSelect,
     MatOption,
     MatAutocompleteModule,
@@ -66,8 +65,6 @@ export class AddParkingReservation {
   ) {}
 
   minDate = signal(new Date());
-
-  readonly minTime = new Date();
 
   selectedValue!: string;
 

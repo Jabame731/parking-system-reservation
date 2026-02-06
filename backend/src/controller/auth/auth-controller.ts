@@ -9,10 +9,12 @@ import {
 
 export const registerUserController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
+  console.log(req.body);
+
   const result: Result<SuccessResponse, ErrorResponse> = await registerUserIn(
-    req.body
+    req.body.data,
   );
 
   if (!result.success) {
@@ -31,7 +33,7 @@ export const registerUserController = async (
 
 export const loginUserController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const result: Result<
     SuccessResponse<UserResponse>,

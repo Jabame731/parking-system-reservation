@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { CreateReservation } from '../../models';
+import { CreateReservation, Reservation } from '../../models';
 import { ReservationDatasource } from '../../datasources';
 import { Observable } from 'rxjs';
 import { ReservationRepositoryInterface } from '../../../domain';
@@ -12,5 +12,13 @@ export class ReservationRepository implements ReservationRepositoryInterface {
 
   addParkingReservation(reservation: CreateReservation): Observable<string> {
     return this.reservationDatasource.addParkingReservation(reservation);
+  }
+
+  createPaypalReservation(reservationId: string): Observable<string> {
+    return this.reservationDatasource.createPaypalReservation(reservationId);
+  }
+
+  approvePaypalReservation(reservationId: string, paypalOrderId: string): Observable<Reservation> {
+    return this.reservationDatasource.approvePaypalReservation(reservationId, paypalOrderId);
   }
 }

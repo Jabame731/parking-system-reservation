@@ -12,11 +12,17 @@ export class ParkingSlotItemsPipe implements PipeTransform {
     return slots.map((slot) => {
       const sensorValue = Number(slot.sensorValue);
 
+      const converted = slot.isPaid ? true : false;
+
       return {
         id: slot.id,
         name: slot.slotName,
         status: sensorValue === 1 ? 'occupied' : slot.slotStatus.toLocaleLowerCase(),
         plate: slot.carOcuppied,
+        isPaid: converted,
+        reservationId: slot.reservationId!,
+        paymentPaypal: slot.paymentResult,
+        userId: slot.userId!,
       };
     });
   }

@@ -36,6 +36,7 @@
   } @else {
     <app-parking-card-availability
       [slots]="parkingSlotData() | parkingSlotItems"
+      [userId]="userId()"
       (handleReservation)="handleAddReservation($event)"
     ></app-parking-card-availability>
   }
