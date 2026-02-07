@@ -63,6 +63,8 @@ export const initialParkingReducer = createReducer(
             slotStatus: 'reserved',
             isPaid: false,
             userId: reservation.userId,
+            carType: reservation.carType,
+            carOccupied: reservation.licensePlate,
             reservationId,
           };
         }

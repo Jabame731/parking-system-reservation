@@ -1,5 +1,6 @@
 import { connection } from "../../config/mysql.db";
 import { ErrorResponse, Parking, Result, SuccessResponse } from "../../utils";
+import { Reservation } from "../../utils/models/reservation.model";
 
 /**
  *
@@ -15,9 +16,8 @@ export const getAvailableSlots = async (): Promise<
       `
             SELECT slotName
             FROM parking_slot
-            WHERE slotStatus = 'AVAILABLE'
+            WHERE sensorStatus = 'ACTIVE'
             ORDER BY slotName
-
         `,
     );
 
@@ -55,15 +55,22 @@ export const updateSensorSlot = async (payload: {
   try {
     const { slotId, sensorValue } = payload;
 
-    const sensor = sensorValue === 1;
+    const sensor = Number(sensorValue) === 1;
     const status = Number(sensorValue) === 1 ? "OCCUPIED" : "AVAILABLE";
 
     const [rows] = await db.execute(
-      `SELECT id FROM parking_slot WHERE slotName = ?`,
+      `SELECT id, carOccupied FROM parking_slot WHERE slotName = ?`,
       [slotId],
     );
 
-    if ((rows as any[]).length === 0) {
+    const parkingSlots = rows as Parking[];
+    const parkingSlot = parkingSlots[0]!;
+
+    const car = sensorValue === 0 ? "" : parkingSlot.carOccupied;
+
+    console.log("parkingSlots", parkingSlots);
+
+    if (parkingSlots.length === 0) {
       return {
         success: false,
         error: {
@@ -73,13 +80,45 @@ export const updateSensorSlot = async (payload: {
       };
     }
 
+    const slotPkId = parkingSlots[0]?.id;
+
+    console.log("slotPkId", slotPkId);
+
+    if (sensorValue === 0) {
+      const [resRows] = await db.execute(
+        `
+          SELECT id FROM reservation
+          WHERE slotId = ? AND endTime IS NULL
+        `,
+        [slotPkId],
+      );
+
+      const reservations = resRows as Reservation[];
+      console.log("reservastion", reservations);
+
+      if (reservations.length > 0) {
+        const reservationId = reservations[0]?.id;
+
+        console.log("reservationId", reservationId);
+
+        await db.execute(
+          `
+            UPDATE reservation
+            SET endTime = NOW()
+            WHERE id = ?
+          `,
+          [reservationId],
+        );
+      }
+    }
+
     await db.execute(
       `
         UPDATE parking_slot
-        SET sensorValue = ?, slotStatus = ?, updatedAt = NOW()
+        SET sensorValue = ?, slotStatus = ?, carOccupied = ?, updatedAt = NOW()
         WHERE slotName = ?
       `,
-      [sensor, status, slotId],
+      [sensor, status, car, slotId],
     );
 
     return {

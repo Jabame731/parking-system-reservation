@@ -3,7 +3,7 @@ import { PaymentResult } from './reservation.attributes';
 export interface Parking {
   id: string;
   slotName: string;
-  carOcuppied: string;
+  carOccupied: string;
   sensorValue: string;
   slotStatus: string;
   createdBy: string;
@@ -13,6 +13,7 @@ export interface Parking {
   paymentResult?: PaymentResult;
   reservationId?: string;
   userId?: string;
+  carType: string;
 }
 
 export interface CreateParking {

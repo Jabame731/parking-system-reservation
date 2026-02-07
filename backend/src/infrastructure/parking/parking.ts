@@ -78,10 +78,11 @@ export const getAllParkingSlots = async (): Promise<
       ps.*,
       r.id as reservationId,
       r.userId as userId,
+      r.carType,
       r.isPaid, 
       r.paymentResult 
     FROM parking_slot ps
-    LEFT JOIN reservation r ON ps.id = r.slotId
+    LEFT JOIN reservation r ON ps.id = r.slotId AND r.endTime IS NULL
   `;
 
   try {

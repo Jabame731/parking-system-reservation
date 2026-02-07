@@ -4,10 +4,10 @@ import { updateSensorSlot } from "../../infrastructure";
 
 export const updateSensorSlotController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const result: Result<SuccessResponse, ErrorResponse> = await updateSensorSlot(
-    req.body
+    req.body,
   );
 
   if (!result.success) {

@@ -16,9 +16,6 @@
       [class.!bg-gray-200]="slot.status === 'maintenance'"
       [class.!border-gray-400]="slot.status === 'maintenance'"
       [class.!text-gray-600]="slot.status === 'maintenance'"
-      [class.opacity-60]="
-        slot.status !== 'available' && (slot.status !== 'reserved' || slot.isPaid)
-      "
       [class.pointer-events-none]="
         slot.status === 'occupied' ||
         slot.status === 'maintenance' ||
@@ -47,12 +44,12 @@
       <div class="text-center font-semibold text-xl">{{ slot.name }}</div>
 
       <div class="text-center text-sm font-medium">
-        {{ slot.status | titlecase }}
+        {{ slot.status | titlecase }} {{ slot.plate ? `for ${slot.plate}` : ' ' }}
       </div>
 
-      @if (slot.plate) {
-        <div class="text-xs text-center opacity-80">
-          {{ slot.plate }}
+      @if (slot.carType) {
+        <div class="text-xs text-center">
+          {{ slot.carType }}
         </div>
       }
 

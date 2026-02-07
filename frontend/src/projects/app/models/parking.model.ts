@@ -13,6 +13,7 @@ export interface ParkingSlotConverted {
   isPaid?: boolean;
   paymentPaypal?: PaymentPaypal;
   reservationId: string;
+  carType: string;
   userId: string;
 }
 

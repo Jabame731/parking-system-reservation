@@ -2,118 +2,129 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 #include <ArduinoJson.h>
-#include <WiFiClientSecure.h>
 
+// --- Configuration ---
 const char* ssid = "";
 const char* password = "";
 
-const char* apiUrl = "https://parking-system-reservation.vercel.app/api/sensor";
+//NOTE CHANGE THE HTTPCLIENT HTTP TO HTTPS ON PRODUCTION
 
+//PC's IP and Express port
+const char* apiUrl = "http://192.168.1.15:8800/api/sensor";
+// const char* apiUrl = "https://parking-system-reservation.vercel.app/api/sensor";
 
 const int irPin = D5;
 int lastState = -1;
-
 String slotId = "";
-
 
 void setup() {
   Serial.begin(9600);
   pinMode(irPin, INPUT);
 
+  // Connect to WiFi
   WiFi.begin(ssid, password);
-  Serial.print("Connecting to the WiFi");
-
-
-  while(WiFi.status() != WL_CONNECTED) {
+  Serial.print("Connecting to WiFi...");
+  
+  while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print("\nNot connected to the WiFi");
+    Serial.print(".");
   }
 
-  Serial.println("\nWiFi Connected");
+  Serial.println("\nWiFi Connected!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
 
   fetchActiveSlots();
 }
 
-
 void loop() {
-  if (slotId.length() == 0) return;
+  if (slotId.length() == 0) {
+    delay(5000);
+    fetchActiveSlots();
+    return;
+  }
 
   int raw = digitalRead(irPin);
-  int currentState = (raw == LOW) ? 1 : 0;
+  int currentState = (raw == LOW) ? 1 : 0; 
 
   if (currentState != lastState) {
     sendSensorUpdate(currentState);
     lastState = currentState;
 
     Serial.println(
-      currentState == 1 ? "Car detected" : "Car left"
+      currentState == 1 ? ">> Car detected" : ">> Slot cleared"
     );
   }
 
-  delay(300);
+  delay(500); 
 }
 
-
 void fetchActiveSlots() {
-  WiFiClientSecure client;
-  HTTPClient https;
+  WiFiClient client; 
+  HTTPClient http;
 
-  client.setInsecure();
+  Serial.println("[HTTP] Fetching slots...");
+  
+  if (http.begin(client, apiUrl)) {
+    int code = http.GET();
+    
+    if (code == HTTP_CODE_OK) {
+      String response = http.getString();
+      Serial.println("Response: " + response);
 
-  https.begin(client, apiUrl);
-  int code = https.GET();
+      StaticJsonDocument<512> doc;
+      DeserializationError error = deserializeJson(doc, response);
 
-  Serial.println("HTTP Code: " + String(code));
+      if (!error) {
+        JsonArray arr = doc["data"].as<JsonArray>();
 
-  if (code == HTTP_CODE_OK) {
-    String response = https.getString();
-    Serial.println("Slots response: " + response);
+      
+        if (!arr.isNull() && arr.size() > 0) {
+            for (int i = 0; i < arr.size(); i++) {
+              String s = arr[i].as<String>();
+              Serial.print("Slot ");
+              Serial.print(i);
+              Serial.print(": ");
+              Serial.println(s);
+            }
 
-    StaticJsonDocument<512> doc;
-    DeserializationError error = deserializeJson(doc, response);
-
-    if (!error) {
-      JsonObject obj = doc.as<JsonObject>();
-      JsonArray arr = obj["data"].as<JsonArray>();
-
-      if (!arr.isNull() && arr.size() > 0) {
-        slotId = arr[0].as<String>();
-        Serial.println("Assigned slotId: " + slotId);
+          slotId = arr[0].as<String>();
+          Serial.println("Assigned slotId: " + slotId);
+        } else {
+          Serial.println("No active slots in data array");
+        }
       } else {
-        Serial.println("No active slots available");
+        Serial.print("JSON Parse Failed: ");
+        Serial.println(error.c_str());
       }
     } else {
-      Serial.println("JSON parse error");
+      Serial.printf("[HTTP] GET Failed, Error: %s\n", http.errorToString(code).c_str());
     }
-  } else {
-    Serial.println("Failed to fetch slots");
+    http.end();
   }
-
-  https.end();
-
 }
 
 void sendSensorUpdate(int sensorValue) {
-  WiFiClientSecure client;
-  HTTPClient https;
+  WiFiClient client;
+  HTTPClient http;
 
-  client.setInsecure();
+  if (http.begin(client, apiUrl)) {
+    http.addHeader("Content-Type", "application/json");
 
-  https.begin(client, apiUrl);
-  https.addHeader("Content-Type", "application/json");
+    StaticJsonDocument<128> doc;
+    doc["slotId"] = slotId;
+    doc["sensorValue"] = sensorValue;
 
-  String payload = "{";
-  payload += "\"slotId\":\"" + slotId + "\",";
-  payload += "\"sensorValue\":" + String(sensorValue);
-  payload += "}";
+    String payload;
+    serializeJson(doc, payload);
 
-  int code = https.POST(payload);
+    int code = http.POST(payload);
 
-  Serial.println("Update sent. HTTP code: " + code);
-
-  https.end();
-
+    if (code > 0) {
+      Serial.printf("[HTTP] Update sent, Code: %d\n", code);
+    } else {
+      Serial.printf("[HTTP] Update failed: %s\n", http.errorToString(code).c_str());
+    }
+    http.end();
+  }
 }
-
-
-

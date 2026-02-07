@@ -18,11 +18,12 @@ export class ParkingSlotItemsPipe implements PipeTransform {
         id: slot.id,
         name: slot.slotName,
         status: sensorValue === 1 ? 'occupied' : slot.slotStatus.toLocaleLowerCase(),
-        plate: slot.carOcuppied,
+        plate: slot.carOccupied,
         isPaid: converted,
         reservationId: slot.reservationId!,
         paymentPaypal: slot.paymentResult,
         userId: slot.userId!,
+        carType: slot.carType,
       };
     });
   }
