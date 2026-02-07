@@ -1,3 +1,5 @@
+import { PaymentResultData } from "./reservation.model";
+
 export interface Parking {
   id: string;
   slotName: string;
@@ -5,6 +7,10 @@ export interface Parking {
   sensorValue: number;
   sensorStatus: string;
   slotStatus: string;
+  reservationId: string;
+  isPaid: boolean;
+  paymentResult: PaymentResultData;
+  userId: string;
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;

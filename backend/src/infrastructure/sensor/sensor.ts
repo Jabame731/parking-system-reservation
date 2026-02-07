@@ -1,5 +1,6 @@
 import { connection } from "../../config/mysql.db";
 import { ErrorResponse, Parking, Result, SuccessResponse } from "../../utils";
+import { Reservation } from "../../utils/models/reservation.model";
 
 /**
  *
@@ -15,9 +16,8 @@ export const getAvailableSlots = async (): Promise<
       `
             SELECT slotName
             FROM parking_slot
-            WHERE slotStatus = 'AVAILABLE'
+            WHERE sensorStatus = 'ACTIVE'
             ORDER BY slotName
-
         `,
     );
 
@@ -59,11 +59,14 @@ export const updateSensorSlot = async (payload: {
     const status = Number(sensorValue) === 1 ? "OCCUPIED" : "AVAILABLE";
 
     const [rows] = await db.execute(
-      `SELECT id FROM parking_slot WHERE slotName = ?`,
+      `SELECT id, carOccupied FROM parking_slot WHERE slotName = ?`,
       [slotId],
     );
 
     const parkingSlots = rows as Parking[];
+    const parkingSlot = parkingSlots[0]!;
+
+    const car = sensorValue === 0 ? "" : parkingSlot.carOccupied;
 
     if (parkingSlots.length === 0) {
       return {
@@ -77,13 +80,11 @@ export const updateSensorSlot = async (payload: {
 
     const slotPkId = parkingSlots[0]?.id;
 
-    if (Number(sensorValue) === 0) {
+    if (sensorValue === 0) {
       const [resRows] = await db.execute(
         `
           SELECT id FROM reservation
           WHERE slotId = ? AND endTime IS NULL
-          ORDER BY createdAt DESC
-          LIMIT 1
         `,
         [slotPkId],
       );
@@ -107,16 +108,10 @@ export const updateSensorSlot = async (payload: {
     await db.execute(
       `
         UPDATE parking_slot
-        SET sensorValue = ?, 
-            slotStatus = ?, 
-            carOccupied = CASE 
-              WHEN ? = 0 THEN NULL
-              ELSE carOccupied
-            END,
-            updatedAt = NOW()
-        WHERE id = ?
+        SET sensorValue = ?, slotStatus = ?, carOccupied = ?, updatedAt = NOW()
+        WHERE slotName = ?
       `,
-      [sensor, status, slotPkId],
+      [sensor, status, car, slotId],
     );
 
     return {
@@ -134,7 +129,5 @@ export const updateSensorSlot = async (payload: {
         errorMessage: error instanceof Error ? error.message : String(error),
       },
     };
-  }
-};
   }
 };

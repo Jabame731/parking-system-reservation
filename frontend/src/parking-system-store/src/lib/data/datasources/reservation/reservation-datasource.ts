@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment.development';
 import { AppErrors } from '../../errors';
@@ -7,7 +7,7 @@ import UnexpectedError = AppErrors.UnexpectedError;
 import NotFoundError = AppErrors.NotFoundError;
 import ForbiddenError = AppErrors.ForbiddenError;
 import { catchError, map, Observable, of, throwError } from 'rxjs';
-import { CreateReservation, Document, ReservationInterface } from '../../models';
+import { CreateReservation, Document, Reservation, ReservationInterface } from '../../models';
 
 @Injectable({
   providedIn: 'root',
@@ -31,13 +31,50 @@ export class ReservationDatasource implements ReservationInterface {
     }
   }
 
-  addParkingReservation(reservation: CreateReservation): Observable<any> {
+  addParkingReservation(reservation: CreateReservation): Observable<string> {
     return this.http
       .post(`${this.baseUrl}/api/parkingReservation`, reservation, {
         withCredentials: true,
+        observe: 'response',
       })
       .pipe(
-        map((res: Document<string>) => res.data as string),
+        map((res) => {
+          return res.headers.get('location')?.split('/').pop() as string;
+        }),
+        catchError((err) => {
+          return this.errorReport(err);
+        }),
+      );
+  }
+
+  createPaypalReservation(reservationId: string): Observable<string> {
+    return this.http
+      .post(
+        `${this.baseUrl}/api/paypal/createPaypalReservation`,
+        { reservationId },
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res: Document<string>) => {
+          return res.data as string;
+        }),
+        catchError((err) => this.errorReport(err)),
+      );
+  }
+
+  approvePaypalReservation(reservationId: string, paypalOrderId: string): Observable<Reservation> {
+    return this.http
+      .post(
+        `${this.baseUrl}/api/paypal/approvePaypalPayment`,
+        { reservationId, paypalOrderId },
+        {
+          withCredentials: true,
+        },
+      )
+      .pipe(
+        map((res: Document<Reservation>) => res.data as Reservation),
         catchError((err) => this.errorReport(err)),
       );
   }

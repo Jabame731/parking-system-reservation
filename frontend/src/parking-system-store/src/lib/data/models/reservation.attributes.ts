@@ -12,6 +12,7 @@ export interface CreateReservation {
 }
 
 export interface Reservation {
+  id: string;
   slotId: string;
   userId: string;
   licensePlate: string;
@@ -21,6 +22,15 @@ export interface Reservation {
   amount: number;
   paymentMethod: string;
   paymentStatus: string;
+  paymentResult: PaymentResult;
+  isPaid: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface PaymentResult {
+  id: string;
+  status: string;
+  email_address: string;
+  pricePaid: string;
 }

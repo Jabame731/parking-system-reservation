@@ -73,8 +73,20 @@ export const getAllParkingSlots = async (): Promise<
 > => {
   const db = connection();
 
+  const query = `
+    SELECT 
+      ps.*,
+      r.id as reservationId,
+      r.userId as userId,
+      r.carType,
+      r.isPaid, 
+      r.paymentResult 
+    FROM parking_slot ps
+    LEFT JOIN reservation r ON ps.id = r.slotId AND r.endTime IS NULL
+  `;
+
   try {
-    const [rows] = await db.execute("SELECT * FROM parking_slot");
+    const [rows] = await db.execute(query);
 
     return {
       success: true,

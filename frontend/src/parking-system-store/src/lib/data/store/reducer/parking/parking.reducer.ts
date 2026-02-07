@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { Parking } from '../../../models';
 import * as fromParking from '../../actions/parking/parking.actions';
 import * as fromReservation from '../../actions/reservation/reservation.actions';
+import * as fromPaypal from '../../actions/paypal/paypal.actions';
 
 export const parkingFeatureKey = 'parking';
 
@@ -48,16 +49,39 @@ export const initialParkingReducer = createReducer(
       error: error,
     };
   }),
-  on(fromReservation.addParkingReservationSucceeded, (state, { reservation, response }) => {
+  on(fromReservation.addParkingReservationSucceeded, (state, { reservation, reservationId }) => {
     return {
       ...state,
       reservationAddLoading: false,
       reservationAddSuccess: true,
       data: state.data?.map((slot) => {
+        console.log(`response`, reservationId);
+
         if (slot.id === reservation.slotId) {
           return {
             ...slot,
-            slotStatus: 'RESERVED',
+            slotStatus: 'reserved',
+            isPaid: false,
+            userId: reservation.userId,
+            carType: reservation.carType,
+            carOccupied: reservation.licensePlate,
+            reservationId,
+          };
+        }
+
+        return slot;
+      }),
+    };
+  }),
+  on(fromPaypal.approvePaypalReservationSucceeded, (state, { response }) => {
+    return {
+      ...state,
+      data: state.data?.map((slot: Parking) => {
+        if (slot.reservationId === response.id) {
+          return {
+            ...slot,
+            paymentResult: response.paymentResult,
+            isPaid: true,
           };
         }
 

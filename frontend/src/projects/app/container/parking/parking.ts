@@ -4,6 +4,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
   viewChild,
 } from '@angular/core';
@@ -27,6 +28,9 @@ import { ParkingSlotItemsPipe } from 'projects/app/pipe';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ParkingSlotConverted } from '../../models';
 import { CreateReservation } from '@parking-system-store/public-api';
+import { CdkNoDataRow } from '@angular/cdk/table';
+import { ICreateOrderRequest, IPayPalConfig, NgxPayPalModule } from 'ngx-paypal';
+import { environment } from '@parking-system-store/environments/environment.development';
 
 @Component({
   selector: 'app-parking',
@@ -38,6 +42,8 @@ import { CreateReservation } from '@parking-system-store/public-api';
     ParkingCardAvailability,
     ParkingSlotItemsPipe,
     MatProgressSpinner,
+    CdkNoDataRow,
+    NgxPayPalModule,
   ],
   templateUrl: './parking.html',
   styleUrl: './parking.scss',
@@ -87,8 +93,6 @@ export class Parking implements OnInit, OnDestroy {
       ...data,
       userId: this.userId()!,
     };
-
-    console.log(onSuccess());
 
     this.reservationUsecase.addReservation(reservationData, {
       onSuccess: () => {

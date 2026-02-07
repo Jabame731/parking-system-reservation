@@ -4,15 +4,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { provideStoreDevtools, StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { MetaReducer, StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import { MetaReducer, provideStore, StoreModule } from '@ngrx/store';
+import { EffectsModule, provideEffects } from '@ngrx/effects';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { reducers } from '@parking-system-store/lib/data/store/reducer/meta/meta-reducer.reducer';
 import { ParkingSystemStoreModule } from '@parking-system-store/lib/store.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TokenInterceptor } from '@parking-system-store/lib/data/interceptors';
+import { reducers, clearStateMetaReducer } from '@parking-system-store/public-api';
 
 export const extModules = [
   StoreDevtoolsModule.instrument({
@@ -37,7 +37,7 @@ export function localStorageSyncReducer(reducer: any): any {
   })(reducer);
 }
 
-const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
+const metaReducers: MetaReducer<any>[] = [clearStateMetaReducer, localStorageSyncReducer];
 
 @NgModule({
   declarations: [AppComponent],
