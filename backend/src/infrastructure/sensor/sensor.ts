@@ -55,7 +55,7 @@ export const updateSensorSlot = async (payload: {
   try {
     const { slotId, sensorValue } = payload;
 
-    const sensor = sensorValue === 1;
+    const sensor = Number(sensorValue) === 1;
     const status = Number(sensorValue) === 1 ? "OCCUPIED" : "AVAILABLE";
 
     const [rows] = await db.execute(
@@ -63,7 +63,9 @@ export const updateSensorSlot = async (payload: {
       [slotId],
     );
 
-    if ((rows as any[]).length === 0) {
+    const parkingSlots = rows as Parking[];
+
+    if (parkingSlots.length === 0) {
       return {
         success: false,
         error: {
@@ -73,13 +75,48 @@ export const updateSensorSlot = async (payload: {
       };
     }
 
+    const slotPkId = parkingSlots[0]?.id;
+
+    if (Number(sensorValue) === 0) {
+      const [resRows] = await db.execute(
+        `
+          SELECT id FROM reservation
+          WHERE slotId = ? AND endTime IS NULL
+          ORDER BY createdAt DESC
+          LIMIT 1
+        `,
+        [slotPkId],
+      );
+
+      const reservations = resRows as Reservation[];
+
+      if (reservations.length > 0) {
+        const reservationId = reservations[0]?.id;
+
+        await db.execute(
+          `
+            UPDATE reservation
+            SET endTime = NOW()
+            WHERE id = ?
+          `,
+          [reservationId],
+        );
+      }
+    }
+
     await db.execute(
       `
         UPDATE parking_slot
-        SET sensorValue = ?, slotStatus = ?, updatedAt = NOW()
-        WHERE slotName = ?
+        SET sensorValue = ?, 
+            slotStatus = ?, 
+            carOccupied = CASE 
+              WHEN ? = 0 THEN NULL
+              ELSE carOccupied
+            END,
+            updatedAt = NOW()
+        WHERE id = ?
       `,
-      [sensor, status, slotId],
+      [sensor, status, slotPkId],
     );
 
     return {
@@ -97,5 +134,7 @@ export const updateSensorSlot = async (payload: {
         errorMessage: error instanceof Error ? error.message : String(error),
       },
     };
+  }
+};
   }
 };
