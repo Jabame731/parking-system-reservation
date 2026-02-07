@@ -68,8 +68,6 @@ export const updateSensorSlot = async (payload: {
 
     const car = sensorValue === 0 ? "" : parkingSlot.carOccupied;
 
-    console.log("parkingSlots", parkingSlots);
-
     if (parkingSlots.length === 0) {
       return {
         success: false,
@@ -82,8 +80,6 @@ export const updateSensorSlot = async (payload: {
 
     const slotPkId = parkingSlots[0]?.id;
 
-    console.log("slotPkId", slotPkId);
-
     if (sensorValue === 0) {
       const [resRows] = await db.execute(
         `
@@ -94,12 +90,9 @@ export const updateSensorSlot = async (payload: {
       );
 
       const reservations = resRows as Reservation[];
-      console.log("reservastion", reservations);
 
       if (reservations.length > 0) {
         const reservationId = reservations[0]?.id;
-
-        console.log("reservationId", reservationId);
 
         await db.execute(
           `
