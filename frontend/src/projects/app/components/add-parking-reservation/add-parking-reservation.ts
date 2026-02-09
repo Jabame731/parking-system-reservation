@@ -70,7 +70,7 @@ export class AddParkingReservation {
 
   payments = [
     { value: 'payAtTheCounter', viewValue: 'Counter' },
-    { value: 'gCash', viewValue: 'G-Cash QR Code' },
+    { value: 'paypal', viewValue: 'Paypal' },
   ];
 
   carTypes = [

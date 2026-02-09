@@ -58,6 +58,14 @@ export class Shell {
     return this.breakPoint()?.matches;
   });
 
+  user$ = this.authUsecase.authProfile$;
+
+  user = toSignal(this.user$);
+
+  userId = computed(() => {
+    return this.user()?.id;
+  });
+
   readLocalStorageSideNav(): boolean {
     const item = localStorage.getItem(this.localStorageKey);
 
@@ -147,7 +155,7 @@ export class Shell {
     {
       label: 'Transactions',
       icon: 'history',
-      routerLink: ['/history'],
+      routerLink: [`/history/${this.userId()}`],
       roles: ['admin', 'user'],
     },
   ];

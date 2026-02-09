@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
-import { createReservation } from "../../infrastructure";
+import {
+  createReservation,
+  deleteReservationById,
+  getAllReservations,
+  getReservationsByUserId,
+} from "../../infrastructure";
 import { ErrorResponse, Result, SuccessResponse } from "../../utils";
+import { Reservation } from "../../utils/models/reservation.model";
 
 export const createReservationController = async (
   req: Request,
@@ -30,6 +36,99 @@ export const createReservationController = async (
     })
     .setHeader("Access-Control-Expose-Headers", "Location")
     .location(`/reservation/${id}`)
+    .json({
+      message: result.data.message,
+    });
+};
+
+export const getReservationsByUserIdController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { id } = req.params;
+
+  const result: Result<
+    SuccessResponse<Reservation[]>,
+    ErrorResponse
+  > = await getReservationsByUserId(id!);
+
+  if (!result.success) {
+    res.status(result.error.statusCode).json({
+      error: result.error.errorMessage,
+    });
+
+    return;
+  }
+
+  res
+    .status(result.data.statusCode)
+    .set({
+      "Cache-Control": "no-store",
+      Pragma: "no-cache",
+      Expires: "0",
+    })
+    .json({
+      message: result.data.message,
+      data: result.data.data,
+    });
+};
+
+export const getAllReservationsController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const result: Result<
+    SuccessResponse<Reservation[]>,
+    ErrorResponse
+  > = await getAllReservations();
+
+  if (!result.success) {
+    res.status(result.error.statusCode).json({
+      error: result.error.errorMessage,
+    });
+
+    return;
+  }
+
+  const { data, ...other } = result.data;
+
+  console.log(data);
+
+  res
+    .status(result.data.statusCode)
+    .set({
+      "Cache-Control": "no-store",
+      Pragma: "no-cache",
+      Expires: "0",
+    })
+    .json({
+      message: result.data.message,
+      data: data,
+    });
+};
+
+export const deleteReservationByIdController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const result: Result<SuccessResponse, ErrorResponse> =
+    await deleteReservationById(req.body.reservationId);
+
+  if (!result.success) {
+    res.status(result.error.statusCode).json({
+      error: result.error.errorMessage,
+    });
+
+    return;
+  }
+
+  res
+    .status(result.data.statusCode)
+    .set({
+      "Cache-Control": "no-store",
+      Pragma: "no-cache",
+      Expires: "0",
+    })
     .json({
       message: result.data.message,
     });
