@@ -1,4 +1,4 @@
-<table mat-table #table [dataSource]="dataSource()" [trackBy]="trackById" class="app-table">
+<table mat-table #table [dataSource]="dataSource()!" [trackBy]="trackById" class="app-table">
   <ng-container matColumnDef="plateNumber">
     <th
       mat-header-cell
@@ -17,7 +17,29 @@
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <h4>{{ element.plateNumber }}</h4>
+      <h4>{{ element.licensePlate }}</h4>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="carType">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Car Type
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4>{{ element.carType }}</h4>
     </td>
   </ng-container>
 
@@ -43,28 +65,6 @@
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="date">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
-      @if (skeleton()) {
-        <app-skeleton-text
-          [lines]="1"
-          [maxLineWidth]="100"
-          [minLineWidth]="200"
-        ></app-skeleton-text>
-      } @else {
-        Date
-      }
-    </th>
-
-    <td mat-cell *matCellDef="let element">
-      <h4>{{ element.date }}</h4>
-    </td>
-  </ng-container>
-
   <ng-container matColumnDef="timeStart">
     <th
       mat-header-cell
@@ -83,7 +83,29 @@
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <h4>{{ element.timeStart }}</h4>
+      <h4>{{ element.startTime | date: 'mediumTime' }}</h4>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="endTime">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Time Ended
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4>{{ element.endTime | date: 'mediumTime' }}</h4>
     </td>
   </ng-container>
 
@@ -105,26 +127,83 @@
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <h4>{{ element.paymentType }}</h4>
+      <h4>{{ element.paymentMethod }}</h4>
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="bg-gray-100"></tr>
+  <ng-container matColumnDef="status">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Payment Status
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <h4
+        [ngClass]="{
+          'text-green-600': element.paymentStatus === 'PAID',
+          'text-yellow-500': element.paymentStatus === 'PENDING',
+          'text-red-500': element.paymentStatus === 'CANCELED',
+        }"
+        class="font-semibold"
+      >
+        {{ element.paymentStatus }}
+      </h4>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="app-table__header app-table__header--with-left-border"
+    >
+      @if (skeleton()) {
+        <app-skeleton-text
+          [lines]="1"
+          [maxLineWidth]="100"
+          [minLineWidth]="200"
+        ></app-skeleton-text>
+      } @else {
+        Actions
+      }
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <!-- BUTTON HERE  @TODO-->
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true" class="bg-gray-100"></tr>
 
   <tr
     mat-row
-    *matRowDef="let row; columns: displayedColumns"
+    *matRowDef="let row; columns: displayedColumns()"
     class="hover:bg-gray-50 transition-colors duration-150"
   ></tr>
 
-  @if (!skeleton()) {
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell text-center py-6" colspan="999">
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell text-center py-6" colspan="999">
+      @if (!skeleton()) {
         <app-empty-history-message
           [message]="'No record of Reservation'"
           [icon]="'no_crash'"
         ></app-empty-history-message>
-      </td>
-    </tr>
-  }
+      } @else {
+        <div class="mt-10 flex flex-col justify-center items-center h-full w-full mb-10">
+          <mat-spinner [diameter]="50"></mat-spinner>
+        </div>
+      }
+    </td>
+  </tr>
 </table>

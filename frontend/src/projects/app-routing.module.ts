@@ -33,7 +33,7 @@ export const routes: Routes = [
         title: 'Parking Slot',
       },
       {
-        path: 'history',
+        path: 'history/:id',
         component: Transactions,
         title: 'Transactions',
       },

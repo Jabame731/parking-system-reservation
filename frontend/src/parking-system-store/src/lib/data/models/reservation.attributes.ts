@@ -26,6 +26,8 @@ export interface Reservation {
   isPaid: boolean;
   createdAt: Date;
   updatedAt: Date;
+  slotName?: string;
+  paidAt: string;
 }
 
 export interface PaymentResult {
@@ -33,4 +35,9 @@ export interface PaymentResult {
   status: string;
   email_address: string;
   pricePaid: string;
+}
+
+export interface ReservationResponse {
+  message?: string;
+  data: Reservation[];
 }

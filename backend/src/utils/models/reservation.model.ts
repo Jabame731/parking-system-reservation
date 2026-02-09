@@ -28,6 +28,7 @@ export interface Reservation {
   reservationDate?: Date;
   createdAt: Date;
   updatedAt: Date;
+  slotName?: string;
 }
 
 //Paypal payment Result

@@ -1,7 +1,16 @@
-import { Pool } from "mysql2/promise";
-import { ErrorResponse, Result, SuccessResponse } from "../../utils";
+import { Pool, ResultSetHeader } from "mysql2/promise";
+import {
+  ErrorResponse,
+  Result,
+  SuccessResponse,
+  User,
+  UserResponse,
+} from "../../utils";
 import { connection } from "../../config/mysql.db";
-import { CreateReservation } from "../../utils/models/reservation.model";
+import {
+  CreateReservation,
+  Reservation,
+} from "../../utils/models/reservation.model";
 
 export const createReservation = async (
   payload: CreateReservation,
@@ -89,6 +98,166 @@ export const createReservation = async (
       },
     };
   } catch (error: any) {
+    return {
+      success: false,
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
+    };
+  }
+};
+
+export const getReservationsByUserId = async (
+  userId: string,
+): Promise<Result<SuccessResponse<Reservation[]>, ErrorResponse>> => {
+  const db = connection();
+
+  try {
+    const [rows] = await db.execute(
+      "SELECT 1 FROM users WHERE id = ? LIMIT 1",
+      [userId],
+    );
+
+    const users = rows as User[];
+
+    if (users.length < 0) {
+      return {
+        success: false,
+        error: {
+          errorMessage: "User not found",
+          statusCode: 404,
+        },
+      };
+    }
+
+    const [query] = await db.query(
+      `
+    SELECT 
+      r.id,
+      r.userId,
+      r.licensePlate,
+      r.carType,
+      r.startTime,
+      r.endTime,
+      r.amount,
+      r.paymentMethod,
+      r.paymentStatus,
+      r.paymentResult,
+      r.isPaid,
+      r.paidAt,
+      r.reservationDate,
+      r.createdAt,
+      r.updatedAt,
+      p.slotName
+    FROM reservation r
+    INNER JOIN parking_slot p ON r.slotId = p.id
+    WHERE r.userId = ?
+  `,
+      [userId],
+    );
+
+    const reservations = query as Reservation[];
+
+    return {
+      success: true,
+      data: {
+        statusCode: 200,
+        message: `Reservation found for current user`,
+        data: reservations.length > 0 ? reservations : [],
+      },
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
+    };
+  }
+};
+
+export const getAllReservations = async (): Promise<
+  Result<SuccessResponse<Reservation[]>, ErrorResponse>
+> => {
+  const db = connection();
+  try {
+    const [query] = await db.query(
+      `
+    SELECT 
+      r.id,
+      r.userId,
+      r.licensePlate,
+      r.carType,
+      r.startTime,
+      r.endTime,
+      r.amount,
+      r.paymentMethod,
+      r.paymentStatus,
+      r.paymentResult,
+      r.isPaid,
+      r.paidAt,
+      r.reservationDate,
+      r.createdAt,
+      r.updatedAt,
+      p.slotName
+    FROM reservation r
+    INNER JOIN parking_slot p ON r.slotId = p.id
+  
+  `,
+    );
+
+    const reservations = query as Reservation[];
+
+    return {
+      success: true,
+      data: {
+        statusCode: 200,
+        message: "Reservations retrieved successfully",
+        data: reservations.length > 0 ? reservations : [],
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
+    };
+  }
+};
+
+export const deleteReservationById = async (
+  reservationId: string,
+): Promise<Result<SuccessResponse, ErrorResponse>> => {
+  const db = connection();
+
+  try {
+    const [result] = await db.execute(`DELETE FROM reservation WHERE id = ?`, [
+      reservationId,
+    ]);
+    const insertResult = result as ResultSetHeader;
+
+    if (insertResult.affectedRows) {
+      return {
+        success: false,
+        error: {
+          statusCode: 404,
+          errorMessage: "Reservation not found",
+        },
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        statusCode: 200,
+        message: "Reservation record deleted successfully",
+      },
+    };
+  } catch (error) {
     return {
       success: false,
       error: {
