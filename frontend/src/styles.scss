@@ -10,6 +10,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
+$theme: mat.define-theme();
+
 html {
   height: 100%;
   @include mat.theme(
@@ -22,6 +24,8 @@ html {
       density: 0,
     )
   );
+
+  @include mat.color-variants-backwards-compatibility($theme);
 }
 
 @theme {
@@ -107,3 +111,10 @@ body {
   height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+.warn {
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--color-alert-700),
+    )
+  );
+}

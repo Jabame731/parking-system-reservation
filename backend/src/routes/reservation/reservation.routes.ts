@@ -15,7 +15,12 @@ router.post("/", verifyToken, createReservationController);
 router.get("/:id", verifyToken, getReservationsByUserIdController);
 
 // Protected Routes
-router.get("/", verifyAdmin, getAllReservationsController);
-router.delete("/", verifyAdmin, deleteReservationByIdController);
+router.get("/", verifyToken, verifyAdmin, getAllReservationsController);
+router.delete(
+  "/:id",
+  verifyToken,
+  verifyAdmin,
+  deleteReservationByIdController,
+);
 
 export default router;

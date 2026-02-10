@@ -1,5 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { CreateParking, Document, Parking, ParkingInterface } from '../../models';
+import {
+  CreateParking,
+  Document,
+  Parking,
+  ParkingInterface,
+  ParkingResponseData,
+} from '../../models';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { AppErrors } from '../../errors';
@@ -42,9 +48,9 @@ export class ParkingDatasource implements ParkingInterface {
       );
   }
 
-  getParkingSlots(): Observable<Parking[]> {
+  getParkingSlots(): Observable<ParkingResponseData> {
     return this.http.get(`${this.baseUrl}/api/parkingSlots`).pipe(
-      map((resp: Document<Parking[]>) => resp.data as Parking[]),
+      map((resp: Document<ParkingResponseData>) => resp.data as ParkingResponseData),
       catchError((err) => this.errorReport(err)),
     );
   }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ParkingRepositoryInterface } from '../../../domain/index';
 import { ParkingDatasource } from '../../datasources';
-import { CreateParking, Parking } from '@parking-system-store/public-api';
+import { CreateParking, Parking, ParkingResponseData } from '@parking-system-store/public-api';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class ParkingRepository implements ParkingRepositoryInterface {
     return this.parkingDatasource.getParkingSlotById(slotId);
   }
 
-  getParkingSlots(): Observable<Parking[]> {
+  getParkingSlots(): Observable<ParkingResponseData> {
     return this.parkingDatasource.getParkingSlots();
   }
 

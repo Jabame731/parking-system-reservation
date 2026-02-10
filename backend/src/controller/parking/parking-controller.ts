@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { ErrorResponse, Parking, Result, SuccessResponse } from "../../utils";
+import {
+  ErrorResponse,
+  Parking,
+  ParkingResponseData,
+  Result,
+  SuccessResponse,
+} from "../../utils";
 import {
   createParkingSlot,
   deleteParkingSlot,
@@ -36,7 +42,7 @@ export const getAllParkingSlotsController = async (
   res: Response,
 ): Promise<void> => {
   const result: Result<
-    SuccessResponse<Parking[]>,
+    SuccessResponse<ParkingResponseData>,
     ErrorResponse
   > = await getAllParkingSlots();
 

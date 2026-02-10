@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, EventEmitter, input, Output, signal } from '@angular/core';
 import {
   MatTable,
   MatColumnDef,
@@ -17,6 +17,7 @@ import { EmptyHistoryMessage } from '../empty-history-message/empty-history-mess
 import { CommonModule, DatePipe } from '@angular/common';
 import { Reservation } from '../../models';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-transactions-table-history',
@@ -37,6 +38,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     EmptyHistoryMessage,
     DatePipe,
     MatProgressSpinner,
+    MatButtonModule,
   ],
   templateUrl: './transactions-table-history.html',
   styleUrl: './transactions-table-history.scss',
@@ -47,6 +49,10 @@ export class TransactionsTableHistory {
   userRole = input<string>();
 
   skeleton = input<boolean | null>(false);
+
+  @Output() handleDeleteReservation: EventEmitter<{
+    reservation: Reservation;
+  }> = new EventEmitter<{ reservation: Reservation }>();
 
   displayedColumns = computed(() => {
     const baseColumns = [
@@ -66,6 +72,10 @@ export class TransactionsTableHistory {
 
     return baseColumns;
   });
+
+  handleDelete(reservation: Reservation) {
+    this.handleDeleteReservation.emit({ reservation });
+  }
 
   trackById = (index: any, item: any) => {
     return item.id || index;

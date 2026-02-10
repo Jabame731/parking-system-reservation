@@ -24,6 +24,17 @@ export interface CreateParking {
   createdBy: string;
 }
 
+export interface Stats {
+  totalSlots: number;
+  availableSlots: number;
+  occupiedSlots: number;
+}
+
+export interface ParkingResponseData {
+  slots: Parking[];
+  stats: Stats;
+}
+
 //  id CHAR(36) PRIMARY KEY,
 //     slotName VARCHAR(50) NOT NULL,
 //     carOccupied VARCHAR(20),

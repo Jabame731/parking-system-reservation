@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { Parking } from '../../../models';
+import { Parking, ParkingResponseData } from '../../../models';
 import * as fromParking from '../../actions/parking/parking.actions';
 import * as fromReservation from '../../actions/reservation/reservation.actions';
 import * as fromPaypal from '../../actions/paypal/paypal.actions';
@@ -7,7 +7,7 @@ import * as fromPaypal from '../../actions/paypal/paypal.actions';
 export const parkingFeatureKey = 'parking';
 
 export interface ParkingState {
-  data?: Parking[];
+  data?: ParkingResponseData;
   loading: boolean;
   loaded: boolean;
   reservationAddLoading?: boolean;
@@ -50,43 +50,61 @@ export const initialParkingReducer = createReducer(
     };
   }),
   on(fromReservation.addParkingReservationSucceeded, (state, { reservation, reservationId }) => {
+    if (!state.data) return state;
+
+    const updatedSlots = state.data.slots.map((slot) => {
+      if (slot.id === reservation.slotId) {
+        return {
+          ...slot,
+          slotStatus: 'reserved',
+          isPaid: false,
+          userId: reservation.userId,
+          carType: reservation.carType,
+          carOccupied: reservation.licensePlate,
+          reservationId,
+        };
+      }
+      return slot;
+    });
+
+    const occupiedCount = updatedSlots.filter((s) => s.slotStatus === 'reserved').length;
+    const totalCount = updatedSlots.length;
+
     return {
       ...state,
       reservationAddLoading: false,
       reservationAddSuccess: true,
-      data: state.data?.map((slot) => {
-        console.log(`response`, reservationId);
-
-        if (slot.id === reservation.slotId) {
-          return {
-            ...slot,
-            slotStatus: 'reserved',
-            isPaid: false,
-            userId: reservation.userId,
-            carType: reservation.carType,
-            carOccupied: reservation.licensePlate,
-            reservationId,
-          };
-        }
-
-        return slot;
-      }),
+      data: {
+        ...state.data,
+        slots: updatedSlots,
+        stats: {
+          ...state.data.stats,
+          totalSlots: totalCount,
+          availableSlots: totalCount - occupiedCount,
+        },
+      },
     };
   }),
   on(fromPaypal.approvePaypalReservationSucceeded, (state, { response }) => {
+    if (!state.data) return state;
+
+    const updatedSlots = state.data.slots.map((slot: Parking) => {
+      if (slot.reservationId === response.id) {
+        return {
+          ...slot,
+          paymentResult: response.paymentResult,
+          isPaid: true,
+        };
+      }
+      return slot;
+    });
+
     return {
       ...state,
-      data: state.data?.map((slot: Parking) => {
-        if (slot.reservationId === response.id) {
-          return {
-            ...slot,
-            paymentResult: response.paymentResult,
-            isPaid: true,
-          };
-        }
-
-        return slot;
-      }),
+      data: {
+        ...state.data,
+        slots: updatedSlots,
+      },
     };
   }),
 );

@@ -4,6 +4,7 @@
       [dataSource]="data()!"
       [userRole]="userRole()!"
       [skeleton]="loading$ | async"
+      (handleDeleteReservation)="openDeleteModal($event)"
     >
     </app-transactions-table-history>
   </div>

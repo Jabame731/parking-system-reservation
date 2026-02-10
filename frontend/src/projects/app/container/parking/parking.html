@@ -1,22 +1,25 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   <app-parking-card-status
-    [cardCount]="50"
+    [cardCount]="parkingSlotData()?.stats?.totalSlots"
+    [loading]="loading()"
     [cardIcon]="'local_parking'"
     [bgColor]="'bg-primary-800'"
     [cardTitle]="'Total Slot'"
   ></app-parking-card-status>
 
   <app-parking-card-status
-    [cardCount]="50"
+    [cardCount]="parkingSlotData()?.stats?.availableSlots"
     [cardIcon]="'check'"
+    [loading]="loading()"
     [bgColor]="'bg-green-700'"
     [cardTitle]="'Available'"
   ></app-parking-card-status>
 
   <app-parking-card-status
-    [cardCount]="50"
+    [cardCount]="parkingSlotData()?.stats?.occupiedSlots"
     [cardIcon]="'minor_crash'"
     [bgColor]="'bg-alert-700'"
+    [loading]="loading()"
     [cardTitle]="'Occupied'"
   ></app-parking-card-status>
 </div>
@@ -35,7 +38,8 @@
     </div>
   } @else {
     <app-parking-card-availability
-      [slots]="parkingSlotData() | parkingSlotItems"
+      [slots]="parkingSlotData()?.slots | parkingSlotItems"
+      [loading]="loading()"
       [userId]="userId()"
       (handleReservation)="handleAddReservation($event)"
     ></app-parking-card-availability>

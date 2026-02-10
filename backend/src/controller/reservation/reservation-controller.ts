@@ -92,8 +92,6 @@ export const getAllReservationsController = async (
 
   const { data, ...other } = result.data;
 
-  console.log(data);
-
   res
     .status(result.data.statusCode)
     .set({
@@ -111,8 +109,10 @@ export const deleteReservationByIdController = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  const { id } = req.params;
+
   const result: Result<SuccessResponse, ErrorResponse> =
-    await deleteReservationById(req.body.reservationId);
+    await deleteReservationById(id!!);
 
   if (!result.success) {
     res.status(result.error.statusCode).json({
