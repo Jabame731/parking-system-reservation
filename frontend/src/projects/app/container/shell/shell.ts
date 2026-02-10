@@ -81,8 +81,6 @@ export class Shell {
   toggleExpansion() {
     const updatedExpanded = !this.isExpanded();
 
-    console.log();
-
     this.writeLocalStorageSidenavSetting(updatedExpanded);
     window.dispatchEvent(new Event('resize'));
     const event = new CustomEvent('localStorageChanged', {

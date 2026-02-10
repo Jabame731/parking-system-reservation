@@ -180,7 +180,11 @@
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <!-- BUTTON HERE  @TODO-->
+      <div class="flex space-x-4 items-center gap-11">
+        <div matTooltip="Assign a color first">
+          <button mat-flat-button color="warn" (click)="handleDelete(element)">Delete</button>
+        </div>
+      </div>
     </td>
   </ng-container>
 

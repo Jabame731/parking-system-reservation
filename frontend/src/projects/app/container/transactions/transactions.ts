@@ -1,5 +1,5 @@
 import { CdkPortal } from '@angular/cdk/portal';
-import { Component, computed, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { PageTitlePortal } from 'projects/app/services';
 import { TransactionsTableHistory } from 'projects/app/components';
@@ -7,7 +7,9 @@ import { AuthUsecase } from '@parking-system-store/lib/usecases';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReservationStore } from '@parking-system-store/public-api';
 import { AsyncPipe, JsonPipe } from '@angular/common';
-
+import { Reservation } from '../../models';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteItemModal } from '../../components';
 @Component({
   selector: 'app-transactions',
   imports: [CdkPortal, MatButtonModule, AsyncPipe, TransactionsTableHistory, JsonPipe],
@@ -19,6 +21,7 @@ export class Transactions implements OnInit, OnDestroy {
   private pageTitlePortal = inject(PageTitlePortal);
   private authUsecase = inject(AuthUsecase);
   private reservationStore = inject(ReservationStore);
+  private dialog = inject(MatDialog);
 
   user$ = this.authUsecase.authProfile$;
 
@@ -38,21 +41,36 @@ export class Transactions implements OnInit, OnDestroy {
   data = toSignal(this.data$);
   loading = toSignal(this.loading$);
 
-  callReservationAPIbyUserRole = computed(() => {
-    if (this.userRole() === 'admin') {
-      return this.reservationStore.getAllReservations();
+  callReservationEffect = effect(() => {
+    const role = this.userRole();
+    const uid = this.userId();
+
+    if (!role || !uid) return;
+
+    if (role === 'admin') {
+      this.reservationStore.getAllReservations();
     } else {
-      return this.reservationStore.getReservationsByUserId({ userId: this.userId()! });
+      this.reservationStore.getReservationsByUserId({ userId: uid });
     }
   });
 
   @ViewChild(CdkPortal) pageTitle!: CdkPortal;
 
   ngOnInit(): void {
-    this.callReservationAPIbyUserRole();
-
     setTimeout(() => {
       this.pageTitlePortal.setPortal(this.pageTitle);
+    });
+  }
+
+  openDeleteModal(data: { reservation: Reservation }) {
+    const dialogRef = this.dialog.open(DeleteItemModal, {
+      data: {},
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      if (!!res) {
+        this.reservationStore.deleteReservation({ reservationId: data.reservation.id });
+      }
     });
   }
 
@@ -62,6 +80,4 @@ export class Transactions implements OnInit, OnDestroy {
       this.pageTitlePortal.setPortal(null!);
     }
   }
-
-  dataSource = [];
 }

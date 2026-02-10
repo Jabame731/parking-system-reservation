@@ -240,7 +240,7 @@ export const deleteReservationById = async (
     ]);
     const insertResult = result as ResultSetHeader;
 
-    if (insertResult.affectedRows) {
+    if (insertResult.affectedRows === 0) {
       return {
         success: false,
         error: {

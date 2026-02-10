@@ -22,3 +22,14 @@ export interface CreateParking {
   carOccupied: string;
   createdBy: string;
 }
+
+export interface Stats {
+  totalSlots: number;
+  availableSlots: number;
+  occupiedSlots: number;
+}
+
+export interface ParkingResponseData {
+  slots: Parking[];
+  stats: Stats;
+}

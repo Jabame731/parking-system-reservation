@@ -28,7 +28,7 @@ export const generateAccessToken = (user: {
 export const verifyToken = (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const secret = process.env.JWT_SECRET!;
   const authHeader = req.headers["authorization"];
@@ -48,7 +48,7 @@ export const verifyToken = (
 export const verifyAdmin = (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (req.user && req.user.role === "admin") {
     next();

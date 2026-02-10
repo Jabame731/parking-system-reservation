@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
-import { CreateParking, Parking } from '../../data/models';
+import { CreateParking, Parking, ParkingResponseData } from '../../data/models';
 
 export interface ParkingRepositoryInterface {
   addParkingSlot(parking: CreateParking): Observable<Partial<Parking>>;
-  getParkingSlots(): Observable<Parking[]>;
+  getParkingSlots(): Observable<ParkingResponseData>;
   getParkingSlotById(slotId: string): Observable<Parking>;
   editParkingSlot(parking: Partial<Parking>): Observable<string>;
   deleteParkingSlot(slotId: string): Observable<string>;

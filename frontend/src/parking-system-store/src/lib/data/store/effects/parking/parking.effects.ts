@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as fromParking from '../../actions/parking/parking.actions';
 import { ParkingRepository } from '../../../repositories';
 import { catchError, map, of, switchMap } from 'rxjs';
-import { Parking } from '../../../models';
+import { Parking, ParkingResponseData } from '../../../models';
 
 @Injectable()
 export class ParkingEffects {
@@ -15,7 +15,7 @@ export class ParkingEffects {
       ofType(fromParking.getParkingSlotAttempted),
       switchMap(() => {
         return this.parkingRepository.getParkingSlots().pipe(
-          map((data: Parking[]) => fromParking.getParkingSlotSucceeded({ data })),
+          map((data: ParkingResponseData) => fromParking.getParkingSlotSucceeded({ data })),
           catchError((error) => {
             return of(fromParking.getParkingSlotFailed({ error }));
           }),

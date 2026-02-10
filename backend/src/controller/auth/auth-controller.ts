@@ -11,8 +11,6 @@ export const registerUserController = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  console.log(req.body);
-
   const result: Result<SuccessResponse, ErrorResponse> = await registerUserIn(
     req.body.data,
   );

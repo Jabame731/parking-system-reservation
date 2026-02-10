@@ -23,3 +23,14 @@ export interface PaymentPaypal {
   email_address: string;
   pricePaid: string;
 }
+
+export interface Stats {
+  totalSlots: number;
+  availableSlots: number;
+  occupiedSlots: number;
+}
+
+export interface ParkingResponseData {
+  slots: ParkingSlotConverted[];
+  stats: Stats;
+}

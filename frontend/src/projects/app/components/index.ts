@@ -13,3 +13,4 @@ export * from './transactions-table-history/transactions-table-history';
 export * from './empty-history-message/empty-history-message';
 export * from './users-table/users-table';
 export * from './paypal-reservation-button/paypal-reservation-button';
+export * from './delete-item-modal/delete-item-modal';

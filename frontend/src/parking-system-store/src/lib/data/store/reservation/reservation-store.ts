@@ -41,8 +41,6 @@ export class ReservationStore extends ComponentStore<ReservationComponenStoreSta
   }));
 
   readonly getReservationFailureUpdater = this.updater((state, error: any) => {
-    console.log(error);
-
     return {
       ...state,
       loaded: false,

@@ -3,6 +3,7 @@ import {
   CreateParking,
   ErrorResponse,
   Parking,
+  ParkingResponseData,
   Result,
   SuccessResponse,
 } from "../../utils";
@@ -69,7 +70,7 @@ export const createParkingSlot = async (
 };
 
 export const getAllParkingSlots = async (): Promise<
-  Result<SuccessResponse<Parking[]>, ErrorResponse>
+  Result<SuccessResponse<ParkingResponseData>, ErrorResponse>
 > => {
   const db = connection();
 
@@ -87,13 +88,40 @@ export const getAllParkingSlots = async (): Promise<
 
   try {
     const [rows] = await db.execute(query);
+    const parkingData = rows as Parking[];
+
+    const stats = parkingData.reduce(
+      (acc, slot) => {
+        acc.totalSlots++;
+
+        if (slot.slotStatus === "OCCUPIED") acc.occupiedSlots++;
+        else if (slot.slotStatus === "RESERVED") acc.reservedSlots++;
+
+        return acc;
+      },
+      {
+        totalSlots: 0,
+        occupiedSlots: 0,
+        reservedSlots: 0,
+      },
+    );
+
+    const availableSlots =
+      stats.totalSlots - stats.occupiedSlots - stats.reservedSlots;
 
     return {
       success: true,
       data: {
         statusCode: 200,
         message: "Records retrieved successfully",
-        data: rows as Parking[],
+        data: {
+          slots: parkingData,
+          stats: {
+            totalSlots: stats.totalSlots,
+            availableSlots,
+            occupiedSlots: stats.occupiedSlots,
+          },
+        },
       },
     };
   } catch (error: any) {
