@@ -27,7 +27,7 @@ export interface Reservation {
   createdAt: Date;
   updatedAt: Date;
   slotName?: string;
-  paidAt: string;
+  paidAt: boolean;
 }
 
 export interface PaymentResult {

@@ -62,6 +62,7 @@ export const initialParkingReducer = createReducer(
           carType: reservation.carType,
           carOccupied: reservation.licensePlate,
           reservationId,
+          paymentMethod: reservation.paymentMethod,
         };
       }
       return slot;
@@ -96,6 +97,28 @@ export const initialParkingReducer = createReducer(
           isPaid: true,
         };
       }
+      return slot;
+    });
+
+    return {
+      ...state,
+      data: {
+        ...state.data,
+        slots: updatedSlots,
+      },
+    };
+  }),
+  on(fromReservation.reservationSetToPaid, (state, { reservationId, isPaid }) => {
+    if (!state.data) return state;
+
+    const updatedSlots = state.data.slots.map((slot) => {
+      if (slot.reservationId === reservationId) {
+        return {
+          ...slot,
+          isPaid,
+        };
+      }
+
       return slot;
     });
 

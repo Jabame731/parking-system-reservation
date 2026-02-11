@@ -114,4 +114,19 @@ export class ReservationDatasource implements ReservationInterface {
         }),
       );
   }
+
+  updateReservation(reservationId: string): Observable<boolean> {
+    return this.http
+      .patch(
+        `${this.baseUrl}/api/parkingReservation/${reservationId}`,
+        {},
+        { withCredentials: true },
+      )
+      .pipe(
+        map(() => true),
+        catchError((error) => {
+          return this.errorReport(error);
+        }),
+      );
+  }
 }

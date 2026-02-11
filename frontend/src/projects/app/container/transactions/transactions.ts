@@ -74,6 +74,12 @@ export class Transactions implements OnInit, OnDestroy {
     });
   }
 
+  updateReservation(data: { id: string }) {
+    if (data.id) {
+      this.reservationStore.updateReservation({ reservationId: data.id });
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.pageTitle?.isAttached) {
       this.pageTitle.detach();

@@ -5,6 +5,7 @@
       [userRole]="userRole()!"
       [skeleton]="loading$ | async"
       (handleDeleteReservation)="openDeleteModal($event)"
+      (handleUpdateReservation)="updateReservation($event)"
     >
     </app-transactions-table-history>
   </div>

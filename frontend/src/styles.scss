@@ -10,20 +10,23 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
-$theme: mat.define-theme();
+$theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$azure-palette,
+    ),
+    typography: (
+      brand-family: '"Noto Sans", sans-serif',
+      plain-family: '"Noto Sans", sans-serif',
+    ),
+  )
+);
 
 html {
   height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: '"Noto Sans", sans-serif',
-      density: 0,
-    )
-  );
+  @include mat.all-component-themes($theme);
 
   @include mat.color-variants-backwards-compatibility($theme);
 }

@@ -11,7 +11,7 @@ export interface Reservation {
   paymentStatus: string;
   paymentResult: PaymentResult | null;
   isPaid: boolean;
-  paidAt?: string | null;
+  paidAt?: boolean | null;
   reservationDate?: string;
   createdAt: Date;
   updatedAt: Date;
