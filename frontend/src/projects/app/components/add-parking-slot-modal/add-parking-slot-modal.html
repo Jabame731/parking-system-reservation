@@ -1,0 +1,43 @@
+<form #addParkingModal="ngForm" (ngSubmit)="performAddParkingSlot(addParkingModal)">
+  <div mat-dialog-content class="p-4 sm:p-6 max-h-[100vh] overflow-y-auto">
+    <h2 class="text-xl font-semibold">Create Parking Slot</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-5">
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>Slot Name</mat-label>
+        <input matInput name="slotName" ngModel required #slotName="ngModel" />
+
+        @if (slotName.hasError('required')) {
+          <mat-error>Slot Name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Car Occupied</mat-label>
+        <input matInput name="carPlate" ngModel #carPlate="ngModel" />
+        <mat-hint>Optional</mat-hint>
+      </mat-form-field>
+    </div>
+    @if (error$.getValue()) {
+      <app-notification class="my-4" [notification]="error$.getValue()"> </app-notification>
+    }
+  </div>
+
+  <div mat-dialog-actions class="p-4 flex gap-2">
+    <button
+      mat-stroked-button
+      mat-dialog-close
+      color="warn"
+      type="button"
+      (click)="onCancelClick()"
+    >
+      Cancel
+    </button>
+    <app-submit-button
+      [isDisabled]="addParkingModal.invalid || addParkingModal.pending!"
+      [isLoading]="submitting$ | async"
+      text="Add Slot"
+      color="primary"
+      type="submit"
+    ></app-submit-button>
+  </div>
+</form>

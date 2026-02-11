@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import {
   AddParkingReservation,
+  AddParkingSlotModal,
+  DeleteItemModal,
   ParkingCardAvailability,
   ParkingCardStatus,
 } from 'projects/app/components';
@@ -28,9 +30,8 @@ import { ParkingSlotItemsPipe } from 'projects/app/pipe';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ParkingSlotConverted } from '../../models';
 import { CreateReservation } from '@parking-system-store/public-api';
-import { CdkNoDataRow } from '@angular/cdk/table';
-import { ICreateOrderRequest, IPayPalConfig, NgxPayPalModule } from 'ngx-paypal';
-import { environment } from '@parking-system-store/environments/environment.development';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-parking',
@@ -42,8 +43,8 @@ import { environment } from '@parking-system-store/environments/environment.deve
     ParkingCardAvailability,
     ParkingSlotItemsPipe,
     MatProgressSpinner,
-    CdkNoDataRow,
     NgxPayPalModule,
+    MatButton,
   ],
   templateUrl: './parking.html',
   styleUrl: './parking.scss',
@@ -58,6 +59,7 @@ export class Parking implements OnInit, OnDestroy {
   parkingSlotData = toSignal(this.parkingUsecase.parkingData$);
   loading = toSignal(this.parkingUsecase.loading$);
   authProfile = toSignal(this.authUsecase.authProfile$);
+  userRole = toSignal(this.authUsecase.userRole$);
 
   userId = computed(() => {
     return this.authProfile()?.id;
@@ -99,6 +101,51 @@ export class Parking implements OnInit, OnDestroy {
         onSuccess();
       },
       onFailure,
+    });
+  }
+
+  handleAddParkingSlot() {
+    this.dialog.open(AddParkingSlotModal, {
+      width: '600px',
+      data: {
+        onSubmit: this.addParkingSlot.bind(this),
+      },
+    });
+  }
+
+  addParkingSlot({
+    data,
+    onSuccess,
+    onFailure,
+  }: {
+    data: { slotName: string; carPlate: string; slotStatus: string };
+    onSuccess: () => void;
+    onFailure: (errors: { errorMsg: string }) => void;
+  }) {
+    const parkingSlotData = {
+      ...data,
+      carOccupied: data.carPlate,
+      createdBy: this.userId()!,
+    };
+
+    this.parkingUsecase.addParkingSlot(parkingSlotData, {
+      onSuccess,
+      onFailure,
+    });
+  }
+
+  handleDeleteSlot(data: { id: string; name: string }) {
+    console.log(data.id);
+    const dialogRef = this.dialog.open(DeleteItemModal, {
+      data: {
+        label: data.name,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((res) => {
+      if (!!res) {
+        this.parkingUsecase.deleteParkingSlot(data.id);
+      }
     });
   }
 

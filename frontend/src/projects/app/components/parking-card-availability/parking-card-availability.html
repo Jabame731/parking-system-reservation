@@ -26,7 +26,8 @@
         "
         (click)="slot.status !== 'reserved' ? onSlotClick(slot) : null"
       >
-        <div class="flex justify-center mt-3">
+        <div class="flex items-center mt-3">
+          <div class="flex-1"></div>
           <mat-icon
             class="icon-display"
             [class.!text-green-600]="slot.status === 'available'"
@@ -42,6 +43,18 @@
                   : 'local_parking'
             }}
           </mat-icon>
+
+          <div class="flex-1 flex justify-end">
+            @if (userRole() === 'admin') {
+              <button
+                matIconButton
+                color="warn"
+                (click)="onDeleteSlot(slot.id, slot.name); $event.stopPropagation()"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            }
+          </div>
         </div>
 
         <div class="text-center font-semibold text-xl">{{ slot.name }}</div>

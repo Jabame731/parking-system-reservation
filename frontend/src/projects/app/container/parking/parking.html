@@ -41,13 +41,22 @@
       [slots]="parkingSlotData()?.slots | parkingSlotItems"
       [loading]="loading()"
       [userId]="userId()"
+      [userRole]="userRole()"
       (handleReservation)="handleAddReservation($event)"
+      (handleDelete)="handleDeleteSlot($event)"
     ></app-parking-card-availability>
   }
 </div>
 
 <ng-container *cdkPortal>
   <div class="flex gap-4 items-center">
+    @if (userRole() === 'admin') {
+      <button mat-flat-button color="primary" class="text-nowrap" (click)="handleAddParkingSlot()">
+        <mat-icon>add</mat-icon>
+        Add Parking Slot
+      </button>
+    }
+
     <span>Parking Dashboard</span>
   </div>
 </ng-container>

@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as fromStore from '../../data/store';
 import { combineLatest, filter, map, Observable, tap } from 'rxjs';
+import { Callbacks, CreateParking } from '../../data/models';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,23 @@ export class ParkingUsecase {
       }),
       filter(([loaded]) => loaded),
       map(() => true),
+    );
+  }
+
+  addParkingSlot(data: CreateParking, callBacks: Callbacks) {
+    this.store.dispatch(
+      fromStore.addParkingSlotAttempted({
+        data,
+        callBacks,
+      }),
+    );
+  }
+
+  deleteParkingSlot(id: string) {
+    this.store.dispatch(
+      fromStore.deleteParkingSlotAttempted({
+        id,
+      }),
     );
   }
 }

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class ParkingRepository implements ParkingRepositoryInterface {
   private parkingDatasource = inject(ParkingDatasource);
 
-  addParkingSlot(parking: CreateParking): Observable<Partial<Parking>> {
+  addParkingSlot(parking: CreateParking): Observable<string> {
     return this.parkingDatasource.addParkingSlot(parking);
   }
 
@@ -26,7 +26,7 @@ export class ParkingRepository implements ParkingRepositoryInterface {
     return this.editParkingSlot(parking);
   }
 
-  deleteParkingSlot(slotId: string): Observable<string> {
-    return this.deleteParkingSlot(slotId);
+  deleteParkingSlot(slotId: string): Observable<boolean> {
+    return this.parkingDatasource.deleteParkingSlot(slotId);
   }
 }
