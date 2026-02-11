@@ -37,13 +37,16 @@ export class ParkingDatasource implements ParkingInterface {
     }
   }
 
-  addParkingSlot(parking: CreateParking): Observable<Partial<Parking>> {
+  addParkingSlot(parking: CreateParking): Observable<string> {
     return this.http
-      .post<Document<Parking>>(`${this.baseUrl}/api/parkingSlots`, parking, {
+      .post(`${this.baseUrl}/api/parkingSlots`, parking, {
         withCredentials: true,
+        observe: 'response',
       })
       .pipe(
-        map((resp: Document<Parking>) => resp.data as Parking),
+        map((res) => {
+          return res.headers.get('location')?.split('/').pop() as string;
+        }),
         catchError((err) => this.errorReport(err)),
       );
   }
@@ -73,13 +76,13 @@ export class ParkingDatasource implements ParkingInterface {
       );
   }
 
-  deleteParkingSlot(slotId: string): Observable<string> {
+  deleteParkingSlot(slotId: string): Observable<boolean> {
     return this.http
       .delete(`${this.baseUrl}/api/parkingSlots/${slotId}`, {
         withCredentials: true,
       })
       .pipe(
-        map((resp: Document<string>) => resp.data as string),
+        map(() => true),
         catchError((err) => this.errorReport(err)),
       );
   }

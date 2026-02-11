@@ -130,4 +130,54 @@ export const initialParkingReducer = createReducer(
       },
     };
   }),
+  on(fromParking.addParkingSlotSucceeded, (state, { id, data }) => {
+    if (!state.data) return state;
+    const newSlot = {
+      ...data,
+      id,
+      slotStatus: data.slotStatus ? data.slotStatus : 'available',
+      isPaid: false,
+    } as Parking;
+    const updatedSlots = [...state.data.slots, newSlot];
+
+    const totalCount = updatedSlots.length;
+    const occupiedCount = updatedSlots.filter(
+      (s) => s.slotStatus === 'reserved' || s.slotStatus === 'occupied',
+    ).length;
+
+    return {
+      ...state,
+      data: {
+        ...state.data,
+        slots: updatedSlots,
+        stats: {
+          ...state.data.stats,
+          totalSlots: totalCount,
+          availableSlots: totalCount - occupiedCount,
+        },
+      },
+    };
+  }),
+  on(fromParking.deleteParkingSlotSucceeded, (state, { id }) => {
+    if (!state.data) return state;
+    const newData = state.data?.slots.filter((slot) => slot.id !== id);
+
+    const totalCount = newData.length;
+    const occupiedCount = newData.filter(
+      (s) => s.slotStatus === 'reserved' || s.slotStatus === 'occupied',
+    ).length;
+
+    return {
+      ...state,
+      data: {
+        ...state.data,
+        slots: newData,
+        stats: {
+          ...state.data.stats,
+          totalSlots: totalCount,
+          availableSlots: totalCount - occupiedCount,
+        },
+      },
+    };
+  }),
 );

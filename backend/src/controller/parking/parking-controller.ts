@@ -19,7 +19,7 @@ export const createParkingSlotController = async (
   res: Response,
 ): Promise<void> => {
   const result: Result<
-    SuccessResponse<Partial<Parking>>,
+    SuccessResponse<{ id: string }>,
     ErrorResponse
   > = await createParkingSlot(req.body);
 
@@ -31,10 +31,20 @@ export const createParkingSlotController = async (
     return;
   }
 
-  res.status(result.data.statusCode).json({
-    message: result.data.message,
-    data: result.data.data,
-  });
+  const id = result.data.data?.id;
+
+  res
+    .status(result.data.statusCode)
+    .set({
+      "Cache-Control": "no-store,",
+      Pragma: "no-cache",
+      Expires: "0",
+    })
+    .setHeader("Access-Control-Expose-Headers", "Location")
+    .location(`/parkingSlot/${id}`)
+    .json({
+      message: result.data.message,
+    });
 };
 
 export const getAllParkingSlotsController = async (
@@ -116,8 +126,9 @@ export const deleteParkingSlotController = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  const { id } = req.params;
   const result: Result<SuccessResponse, ErrorResponse> =
-    await deleteParkingSlot(req.body);
+    await deleteParkingSlot(id!);
 
   if (!result.success) {
     res.status(result.error.statusCode).json({

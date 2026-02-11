@@ -10,7 +10,7 @@ import {
 
 export const createParkingSlot = async (
   parking: CreateParking,
-): Promise<Result<SuccessResponse<Partial<Parking>>, ErrorResponse>> => {
+): Promise<Result<SuccessResponse<{ id: string }>, ErrorResponse>> => {
   const db = connection();
   const { v4: uuidv4 } = await import("uuid");
   const id = uuidv4();
@@ -32,30 +32,23 @@ export const createParkingSlot = async (
     }
 
     const query =
-      "INSERT INTO parking_slot (id, slotName, slotStatus, carOccupied, createdBy) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO parking_slot (id, slotName, slotStatus, sensorStatus, carOccupied, createdBy) VALUES (?, ?, ?, ?, ?, ?)";
 
     await db.execute(query, [
       id,
       parking.slotName,
       parking.slotStatus,
+      "ACTIVE",
       parking.carOccupied,
       parking.createdBy,
     ]);
-
-    const response: Partial<Parking> = {
-      id,
-      slotName: parking.slotName,
-      slotStatus: parking.slotStatus,
-      carOccupied: parking.carOccupied,
-      createdBy: parking.createdBy,
-    };
 
     return {
       success: true,
       data: {
         statusCode: 201,
         message: "Parking lot created successfully",
-        data: response,
+        data: { id },
       },
     };
   } catch (error) {
@@ -243,7 +236,7 @@ export const deleteParkingSlot = async (
   const db = connection();
   try {
     const [result]: any = await db.execute(
-      "DELETE FROM parking_lot WHERE id = ?",
+      "DELETE FROM parking_slot WHERE id = ?",
       [id],
     );
     if (result.affectedRows === 0) {

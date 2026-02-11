@@ -14,3 +14,5 @@ export * from './empty-history-message/empty-history-message';
 export * from './users-table/users-table';
 export * from './paypal-reservation-button/paypal-reservation-button';
 export * from './delete-item-modal/delete-item-modal';
+export * from './add-parking-slot-modal/add-parking-slot-modal';
+export * from './notification/notification';
