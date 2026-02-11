@@ -5,7 +5,9 @@ import { ReservationRepository } from '../../repositories';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { concatMap, Observable, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
-import { ParkingUsecase } from '@parking-system-store/lib/usecases';
+import { ParkingUsecase } from '../../../usecases';
+import * as fromReservation from '../actions/reservation/reservation.actions';
+import { Store } from '@ngrx/store';
 
 export interface ReservationComponenStoreState extends ReservationResponse {
   loading: boolean;
@@ -26,6 +28,7 @@ export class ReservationStore extends ComponentStore<ReservationComponenStoreSta
     private readonly reservationRepo: ReservationRepository,
     private parkingUsecase: ParkingUsecase,
     private readonly snackBar: MatSnackBar,
+    private store: Store<any>,
   ) {
     super(defaultState);
   }
@@ -62,6 +65,24 @@ export class ReservationStore extends ComponentStore<ReservationComponenStoreSta
 
   readonly deleteReservationByIdUpdater = this.updater((state, data: { reservationId: string }) => {
     const newData = state.data.filter((reservation) => reservation.id !== data.reservationId);
+
+    return {
+      ...state,
+      data: newData,
+    };
+  });
+
+  readonly updateReservationUpdater = this.updater((state, data: { reservationId: string }) => {
+    const newData = state.data.map((reservation) => {
+      if (reservation.id === data.reservationId) {
+        return {
+          ...reservation,
+          isPaid: true,
+          paymentStatus: 'PAID',
+        };
+      }
+      return reservation;
+    });
 
     return {
       ...state,
@@ -114,6 +135,40 @@ export class ReservationStore extends ComponentStore<ReservationComponenStoreSta
               });
 
               return this.deleteReservationByIdUpdater({ reservationId: payload.reservationId });
+            },
+            error: (error: any) => {
+              return this.snackBar.open(error, 'x', {
+                horizontalPosition: 'right',
+                verticalPosition: 'top',
+                duration: 5 * 1000,
+              });
+            },
+          }),
+        );
+      }),
+    );
+  });
+
+  readonly updateReservation = this.effect((actions$: Observable<{ reservationId: string }>) => {
+    return actions$.pipe(
+      concatMap((payload) => {
+        return this.reservationRepo.updateReservation(payload.reservationId).pipe(
+          tapResponse({
+            next: () => {
+              this.store.dispatch(
+                fromReservation.reservationSetToPaid({
+                  reservationId: payload.reservationId,
+                  isPaid: true,
+                }),
+              );
+
+              this.snackBar.open('Reservation updated successfully', 'x', {
+                horizontalPosition: 'right',
+                verticalPosition: 'top',
+                duration: 5 * 1000,
+              });
+
+              return this.updateReservationUpdater({ reservationId: payload.reservationId });
             },
             error: (error: any) => {
               return this.snackBar.open(error, 'x', {

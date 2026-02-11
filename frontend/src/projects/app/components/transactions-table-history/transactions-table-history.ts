@@ -18,6 +18,8 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Reservation } from '../../models';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-transactions-table-history',
@@ -39,6 +41,10 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
     DatePipe,
     MatProgressSpinner,
     MatButtonModule,
+    MatMenuItem,
+    MatMenu,
+    MatMenuTrigger,
+    MatIcon,
   ],
   templateUrl: './transactions-table-history.html',
   styleUrl: './transactions-table-history.scss',
@@ -53,6 +59,10 @@ export class TransactionsTableHistory {
   @Output() handleDeleteReservation: EventEmitter<{
     reservation: Reservation;
   }> = new EventEmitter<{ reservation: Reservation }>();
+
+  @Output() handleUpdateReservation: EventEmitter<{
+    id: string;
+  }> = new EventEmitter<{ id: string }>();
 
   displayedColumns = computed(() => {
     const baseColumns = [
@@ -75,6 +85,10 @@ export class TransactionsTableHistory {
 
   handleDelete(reservation: Reservation) {
     this.handleDeleteReservation.emit({ reservation });
+  }
+
+  handleUpdate(id: string) {
+    this.handleUpdateReservation.emit({ id });
   }
 
   trackById = (index: any, item: any) => {

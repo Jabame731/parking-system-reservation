@@ -24,6 +24,7 @@ export class ParkingSlotItemsPipe implements PipeTransform {
         paymentPaypal: slot.paymentResult,
         userId: slot.userId!,
         carType: slot.carType,
+        paymentMethod: slot.paymentMethod,
       };
     });
   }

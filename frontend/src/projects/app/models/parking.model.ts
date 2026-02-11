@@ -15,6 +15,7 @@ export interface ParkingSlotConverted {
   reservationId: string;
   carType: string;
   userId: string;
+  paymentMethod?: string;
 }
 
 export interface PaymentPaypal {

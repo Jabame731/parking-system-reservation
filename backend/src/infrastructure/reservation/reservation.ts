@@ -267,3 +267,48 @@ export const deleteReservationById = async (
     };
   }
 };
+
+export const updateReservationStatus = async (
+  reservationId: string,
+): Promise<Result<SuccessResponse, ErrorResponse>> => {
+  const db = connection();
+  try {
+    const query = `
+        UPDATE reservation
+        SET paymentStatus = ?,
+            isPaid = ?,
+            paidAt = NOW()
+        WHERE id = ?
+      `;
+
+    const [result] = await db.execute(query, ["PAID", true, reservationId]);
+
+    const insertResult = result as ResultSetHeader;
+
+    if (insertResult.affectedRows === 0) {
+      return {
+        success: false,
+        error: {
+          statusCode: 404,
+          errorMessage: "Reservation not found",
+        },
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        statusCode: 200,
+        message: "Reservation updated successfully",
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: {
+        statusCode: 500,
+        errorMessage: error instanceof Error ? error.message : String(error),
+      },
+    };
+  }
+};

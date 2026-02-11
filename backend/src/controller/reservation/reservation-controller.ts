@@ -4,6 +4,7 @@ import {
   deleteReservationById,
   getAllReservations,
   getReservationsByUserId,
+  updateReservationStatus,
 } from "../../infrastructure";
 import { ErrorResponse, Result, SuccessResponse } from "../../utils";
 import { Reservation } from "../../utils/models/reservation.model";
@@ -113,6 +114,35 @@ export const deleteReservationByIdController = async (
 
   const result: Result<SuccessResponse, ErrorResponse> =
     await deleteReservationById(id!!);
+
+  if (!result.success) {
+    res.status(result.error.statusCode).json({
+      error: result.error.errorMessage,
+    });
+
+    return;
+  }
+
+  res
+    .status(result.data.statusCode)
+    .set({
+      "Cache-Control": "no-store",
+      Pragma: "no-cache",
+      Expires: "0",
+    })
+    .json({
+      message: result.data.message,
+    });
+};
+
+export const updateReservationStatusController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { id } = req.params;
+
+  const result: Result<SuccessResponse, ErrorResponse> =
+    await updateReservationStatus(id!!);
 
   if (!result.success) {
     res.status(result.error.statusCode).json({

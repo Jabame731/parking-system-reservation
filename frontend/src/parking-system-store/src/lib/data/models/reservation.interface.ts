@@ -8,4 +8,5 @@ export interface ReservationInterface {
   getReservationByUserId(userId: string): Observable<ReservationResponse>;
   getAllReservations(): Observable<ReservationResponse>;
   deleteReservation(reservationId: string): Observable<boolean>;
+  updateReservation(reservationId: string): Observable<boolean>;
 }

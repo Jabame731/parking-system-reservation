@@ -15,3 +15,14 @@ export const addParkingReservationSucceeded = createAction(
   '[Reservation] Add Parking Reservation Succeeded',
   props<{ reservationId: string; reservation: CreateReservation }>(),
 );
+
+//for updating the parking_slot via PAID reservation
+export const reservationSetToPaid = createAction(
+  '[Reservation] Reservation set to paid successfully',
+  props<{ reservationId: string; isPaid: boolean }>(),
+);
+
+export const reservationSetToFailed = createAction(
+  '[Reservation] Reservation set to paid successfully',
+  props<{ error: string }>(),
+);

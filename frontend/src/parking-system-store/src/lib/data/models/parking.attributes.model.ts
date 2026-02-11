@@ -14,6 +14,7 @@ export interface Parking {
   reservationId?: string;
   userId?: string;
   carType: string;
+  paymentMethod?: string;
 }
 
 export interface CreateParking {

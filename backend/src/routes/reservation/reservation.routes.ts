@@ -5,6 +5,7 @@ import {
   deleteReservationByIdController,
   getAllReservationsController,
   getReservationsByUserIdController,
+  updateReservationStatusController,
 } from "../../controller";
 
 const router = express.Router();
@@ -21,6 +22,12 @@ router.delete(
   verifyToken,
   verifyAdmin,
   deleteReservationByIdController,
+);
+router.patch(
+  "/:id",
+  verifyToken,
+  verifyAdmin,
+  updateReservationStatusController,
 );
 
 export default router;
