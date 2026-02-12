@@ -40,3 +40,13 @@ export interface UserResponse {
   attributes: UserAttr;
   accessToken: string;
 }
+
+export interface EditUserData {
+  id: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  contactNumber: string;
+  image?: string;
+  userRole: string;
+}

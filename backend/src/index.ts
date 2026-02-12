@@ -8,6 +8,7 @@ import parkingSlotRouter from "./routes/parking/parking.routes";
 import reservationRouter from "./routes/reservation/reservation.routes";
 import sensorRouter from "./routes/sensor/sensor.routes";
 import paypalRouter from "./routes/reservation/paypal.routes";
+import userRouter from "./routes/user/user.routes";
 
 const app = express();
 dotenv.config();
@@ -45,6 +46,9 @@ app.use("/api/paypal", paypalRouter);
 
 //Base path for sensor
 app.use("/api/sensor", sensorRouter);
+
+//Base path for user
+app.use("/api/user", userRouter);
 
 const port = process.env.PORT;
 
