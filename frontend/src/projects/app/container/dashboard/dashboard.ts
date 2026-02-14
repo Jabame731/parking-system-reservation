@@ -73,23 +73,7 @@ export class Dashboard implements OnInit, OnDestroy {
     ],
   };
 
-  constructor() {
-    const single = [
-      { name: 'January', value: 52000 },
-      { name: 'February', value: 48000 },
-      { name: 'March', value: 61000 },
-      { name: 'April', value: 58000 },
-      { name: 'May', value: 67000 },
-      { name: 'June', value: 72000 },
-      { name: 'July', value: 75000 },
-      { name: 'August', value: 73000 },
-      { name: 'September', value: 69000 },
-      { name: 'October', value: 76000 },
-      { name: 'November', value: 0 },
-      { name: 'December', value: 0 },
-    ];
-    Object.assign(this, { single });
-  }
+  constructor() {}
 
   onSelect(event: any) {
     console.log(event);
