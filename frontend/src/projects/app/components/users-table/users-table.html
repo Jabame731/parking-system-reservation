@@ -17,7 +17,7 @@
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <h4>{{ element.fullName }}</h4>
+      <h4>{{ element.firstName }} {{ element.lastName }}</h4>
     </td>
   </ng-container>
 
@@ -61,7 +61,7 @@
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <h4>{{ element.phoneNumber }}</h4>
+      <h4>{{ element.contactNumber }}</h4>
     </td>
   </ng-container>
 
@@ -83,11 +83,11 @@
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <h4>{{ element.role }}</h4>
+      <h4>{{ element.userRole }}</h4>
     </td>
   </ng-container>
 
-  <ng-container matColumnDef="status">
+  <ng-container matColumnDef="address">
     <th
       mat-header-cell
       *matHeaderCellDef
@@ -100,56 +100,12 @@
           [minLineWidth]="200"
         ></app-skeleton-text>
       } @else {
-        Status
+        Address
       }
     </th>
 
     <td mat-cell *matCellDef="let element">
-      <h4>{{ element.paymentType }}</h4>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="vehiclePlateNumber">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
-      @if (skeleton()) {
-        <app-skeleton-text
-          [lines]="1"
-          [maxLineWidth]="100"
-          [minLineWidth]="200"
-        ></app-skeleton-text>
-      } @else {
-        Vehicle Plate Number
-      }
-    </th>
-
-    <td mat-cell *matCellDef="let element">
-      <h4>{{ element.vehiclePlateNumber }}</h4>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="vehicleModel">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
-      @if (skeleton()) {
-        <app-skeleton-text
-          [lines]="1"
-          [maxLineWidth]="100"
-          [minLineWidth]="200"
-        ></app-skeleton-text>
-      } @else {
-        Vehicle Model
-      }
-    </th>
-
-    <td mat-cell *matCellDef="let element">
-      <h4>{{ element.vehicleModel }}</h4>
+      <h4>{{ element.address }}</h4>
     </td>
   </ng-container>
 
@@ -170,7 +126,23 @@
       }
     </th>
 
-    <td mat-cell *matCellDef="let element"></td>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="cursor-pointer">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="handleDelete(element)" class="group">
+          <mat-icon class="!text-alert-300 group-hover:!text-alert">delete</mat-icon>
+          Delete
+        </button>
+
+        <button mat-menu-item (click)="handleEdit(element)" class="group">
+          <mat-icon class="!text-primary-300 group-hover:!text-primary">edit</mat-icon>
+          Edit
+        </button>
+      </mat-menu>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="bg-gray-100"></tr>

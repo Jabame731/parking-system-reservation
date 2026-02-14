@@ -1,5 +1,14 @@
 <div class="grow shrink-0 basis-[680px] flex flex-col h-[680px]">
   <div class="h-full">
-    <app-users-table></app-users-table>
+    <app-users-table
+      [dataSource]="data()!"
+      [skeleton]="loading()"
+      (editUser)="handleEditUser($event)"
+      (deleteUser)="handleDeleteUser($event)"
+    ></app-users-table>
   </div>
 </div>
+
+<ng-container *cdkPortal>
+  <span>User Management</span>
+</ng-container>

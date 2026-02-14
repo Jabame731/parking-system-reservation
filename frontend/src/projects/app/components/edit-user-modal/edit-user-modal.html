@@ -1,0 +1,104 @@
+<form #editUser="ngForm" (ngSubmit)="performEditUser(editUser)">
+  <div mat-dialog-content class="p-4 sm:p-6 max-h-[100vh] overflow-y-auto">
+    <h2 class="text-xl font-semibold">Edit User</h2>
+
+    <div class="grid grid-cols-1 lg: grid-cols-2 gap-4 mt-5">
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>First Name</mat-label>
+        <input
+          type="text"
+          matInput
+          name="firstName"
+          required=""
+          [(ngModel)]="userAttributes.firstName"
+          #firstName="ngModel"
+        />
+
+        @if (firstName.hasError('required')) {
+          <mat-error>First Name is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>First Name</mat-label>
+        <input
+          type="text"
+          matInput
+          name="lastName"
+          required=""
+          [(ngModel)]="userAttributes.lastName"
+          #lastName="ngModel"
+        />
+
+        @if (lastName.hasError('required')) {
+          <mat-error>Last name is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="mt-5">
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>Address</mat-label>
+        <input
+          type="text"
+          matInput
+          name="address"
+          required=""
+          [(ngModel)]="userAttributes.address"
+          #address="ngModel"
+        />
+
+        @if (address.hasError('required')) {
+          <mat-error>Address is required</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="grid grid-cols-1 lg: grid-cols-2 gap-4 mt-5">
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>Contact Number</mat-label>
+        <input
+          type="text"
+          matInput
+          name="contactNumber"
+          required=""
+          [(ngModel)]="userAttributes.contactNumber"
+          #contactNumber="ngModel"
+        />
+
+        @if (contactNumber.hasError('required')) {
+          <mat-error>Contact Number is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field class="w-full" hideRequiredMarker>
+        <mat-label>User Role</mat-label>
+        <mat-select [(ngModel)]="userAttributes.userRole" name="role" required>
+          @for (roles of roles; track roles) {
+            <mat-option [value]="roles.value">{{ roles.viewValue }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="p-4 flex gap-2">
+    <button
+      mat-stroked-button
+      mat-dialog-close
+      color="warn"
+      type="button"
+      (click)="onCancelClick()"
+    >
+      Cancel
+    </button>
+    <app-submit-button
+      [isDisabled]="editUser.invalid || editUser.pending! || !editUser.touched"
+      [isLoading]="submitting$ | async"
+      text="Edit User"
+      icon="person"
+      color="primary"
+      type="submit"
+    ></app-submit-button>
+  </div>
+</form>

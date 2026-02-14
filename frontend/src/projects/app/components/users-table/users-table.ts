@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, EventEmitter, input, Output } from '@angular/core';
 import {
   MatTable,
   MatColumnDef,
@@ -15,6 +15,9 @@ import {
 import { SkeletonText } from '../skeleton-text/skeleton-text';
 import { EmptyHistoryMessage } from '../empty-history-message/empty-history-message';
 import { CommonModule } from '@angular/common';
+import { User } from '../../models';
+import { MatMenu, MatMenuTrigger, MatMenuItem } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-users-table',
@@ -33,25 +36,36 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     SkeletonText,
     EmptyHistoryMessage,
+    MatIcon,
+    MatMenu,
+    MatMenuTrigger,
+    MatMenuItem,
   ],
   templateUrl: './users-table.html',
   styleUrl: './users-table.scss',
 })
 export class UsersTable {
-  dataSource = input<any>([]);
+  dataSource = input<User[]>([]);
 
-  skeleton = input<boolean | null>(false);
+  @Output() editUser: EventEmitter<{
+    user: User;
+  }> = new EventEmitter<{ user: User }>();
 
-  displayedColumns = [
-    'fullName',
-    'email',
-    'phoneNumber',
-    'role',
-    'status',
-    'vehiclePlateNumber',
-    'vehicleModel',
-    'actions',
-  ];
+  @Output() deleteUser: EventEmitter<{
+    user: User;
+  }> = new EventEmitter<{ user: User }>();
+
+  skeleton = input<boolean | undefined>(false);
+
+  displayedColumns = ['fullName', 'email', 'phoneNumber', 'role', 'address', 'actions'];
+
+  handleEdit(user: User) {
+    this.editUser.emit({ user });
+  }
+
+  handleDelete(user: User) {
+    this.deleteUser.emit({ user });
+  }
 
   trackById = (index: any, item: any) => {
     return item.id || index;

@@ -64,7 +64,7 @@ export const editUserController = async (
   res: Response,
 ): Promise<void> => {
   const result: Result<SuccessResponse, ErrorResponse> = await editUser(
-    req.body,
+    req.body.data,
   );
 
   if (!result.success) {

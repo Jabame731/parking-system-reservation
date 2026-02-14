@@ -135,7 +135,6 @@ export class Parking implements OnInit, OnDestroy {
   }
 
   handleDeleteSlot(data: { id: string; name: string }) {
-    console.log(data.id);
     const dialogRef = this.dialog.open(DeleteItemModal, {
       data: {
         label: data.name,

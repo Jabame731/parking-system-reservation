@@ -63,7 +63,7 @@ export const editUser = async (
       user.lastName,
       user.address,
       user.contactNumber,
-      user.userRole,
+      user.role,
       user.id,
     ]);
 

@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { Auth, Dashboard, Parking, Shell, Transactions, Users } from './app/container';
 import { NgModule } from '@angular/core';
-import { AuthGuardFn, ParkingSlotGuard, VerifyAuthenticatedGuardFn } from './app/guards';
+import { AuthGuardFn, ParkingSlotGuard, UserGuard, VerifyAuthenticatedGuardFn } from './app/guards';
 
 export const routes: Routes = [
   {
@@ -23,6 +23,7 @@ export const routes: Routes = [
       {
         path: 'users',
         component: Users,
+        canActivate: [UserGuard],
         title: 'Users',
       },
       //users and admin
@@ -43,6 +44,7 @@ export const routes: Routes = [
     path: 'auth',
     component: Auth,
     canActivate: [VerifyAuthenticatedGuardFn],
+    title: 'Credentials',
   },
   { path: '**', redirectTo: '' },
 ];
