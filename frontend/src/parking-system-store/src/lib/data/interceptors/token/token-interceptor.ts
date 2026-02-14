@@ -7,7 +7,7 @@ import {
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthUsecase } from '../../../usecases';
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { catchError, EMPTY, Observable, switchMap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { AppErrors } from '../../errors';
 import NotAuthorized = AppErrors.NotAuthorized;
@@ -34,8 +34,9 @@ export class TokenInterceptor implements HttpInterceptor {
                 return throwError(() => error || new Error('Unknown Error'));
               }),
             );
+          } else {
+            return EMPTY;
           }
-          return this.handleError();
         }),
         catchError((err) => {
           if (err instanceof HttpErrorResponse && err.status === 401) {

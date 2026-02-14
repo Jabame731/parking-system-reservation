@@ -6,3 +6,4 @@ export * from './parking.attributes.model';
 export * from './reservation.interface';
 export * from './reservation.attributes';
 export * from './callbacks.model';
+export * from './user.interface';

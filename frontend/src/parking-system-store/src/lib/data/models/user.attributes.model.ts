@@ -1,4 +1,5 @@
 export interface User {
+  id: string;
   firstName: string;
   lastName: string;
   address: string;
@@ -24,4 +25,14 @@ export interface RegisterUserData {
   contactNumber: string;
   email: string;
   password: string;
+}
+
+export interface EditUserData {
+  id: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  contactNumber: string;
+  image?: string;
+  userRole: string;
 }

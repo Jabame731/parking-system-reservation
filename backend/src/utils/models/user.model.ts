@@ -48,5 +48,5 @@ export interface EditUserData {
   address: string;
   contactNumber: string;
   image?: string;
-  userRole: string;
+  role?: string;
 }
