@@ -1,23 +1,35 @@
 import { CdkPortal } from '@angular/cdk/portal';
 import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthUsecase } from '@parking-system-store/lib/usecases';
+import { DashboardAnalyticsStore } from '@parking-system-store/public-api';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ParkingCardStatus } from 'projects/app/components';
+import { MonthToChartPipe } from 'projects/app/pipe';
 import { PageTitlePortal } from 'projects/app/services';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [NgxChartsModule, ParkingCardStatus, CdkPortal],
+  imports: [NgxChartsModule, ParkingCardStatus, CdkPortal, MonthToChartPipe],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
-  providers: [],
+  providers: [DashboardAnalyticsStore],
 })
 export class Dashboard implements OnInit, OnDestroy {
   private pageTitlePortal = inject(PageTitlePortal);
+  private authUsecase = inject(AuthUsecase);
+  private dashboardAnalyticsStore = inject(DashboardAnalyticsStore);
 
   @ViewChild(CdkPortal) pageTitle!: CdkPortal;
 
+  data = toSignal(this.dashboardAnalyticsStore.data$);
+
+  loading = toSignal(this.dashboardAnalyticsStore.loading$);
+
+  authProfile = toSignal(this.authUsecase.authProfile$);
+
   ngOnInit(): void {
+    this.dashboardAnalyticsStore.getDashboardAnalytics();
     setTimeout(() => {
       this.pageTitlePortal.setPortal(this.pageTitle);
     });
@@ -52,7 +64,7 @@ export class Dashboard implements OnInit, OnDestroy {
   showLegend = true;
   showXAxisLabel = true;
   showYAxisLabel = true;
-  xAxisLabel = 'Month (2026)';
+  xAxisLabel = `Month (${new Date().getFullYear()})`;
   yAxisLabel = 'Parking Revenue';
   reportTitle = 'Monthly Parking Revenue Report';
 

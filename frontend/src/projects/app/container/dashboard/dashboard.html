@@ -4,7 +4,7 @@
     animate.enter="slide-in"
     [view]="view"
     [scheme]="colorScheme"
-    [results]="single"
+    [results]="data()?.summary?.yearlySales | monthToChart"
     [gradient]="gradient"
     [xAxis]="showXAxis"
     [yAxis]="showYAxis"
@@ -22,16 +22,17 @@
   <!-- Revenue Card -->
   <app-parking-card-status
     [cardTitle]="'Today’s Revenue'"
-    [cardCount]="4500"
+    [cardCount]="data()?.summary?.todayRevenue"
     [bgColor]="'bg-primary'"
     [cardIcon]="'money_range'"
+    [loading]="loading()"
   >
   </app-parking-card-status>
 
   <!-- Revenue Card -->
   <app-parking-card-status
     [cardTitle]="'Total Parkings Today'"
-    [cardCount]="128"
+    [cardCount]="data()?.summary?.totalParkingsToday"
     [bgColor]="'bg-accent-700'"
     [cardIcon]="'directions_car'"
   >
@@ -40,24 +41,26 @@
   <!-- Revenue Card -->
   <app-parking-card-status
     [cardTitle]="'Peak Hour'"
-    [cardCount]="'6:00 PM – 7:00 PM'"
+    [cardCount]="data()?.summary?.peakHour"
     [bgColor]="'bg-gray-700'"
     [cardIcon]="'show_chart'"
+    [loading]="loading()"
   >
   </app-parking-card-status>
 
   <!-- Revenue Card -->
   <app-parking-card-status
     [cardTitle]="'Current Occupancy'"
-    [cardCount]="'85%'"
+    [cardCount]="`${data()?.summary?.currentOccupancy}%`"
     [bgColor]="'bg-primary-800'"
     [cardIcon]="'groups'"
+    [loading]="loading()"
   >
   </app-parking-card-status>
 </div>
 
 <ng-container *cdkPortal>
   <div class="items-center">
-    <span>Good Morning John</span>
+    <span>Good Morning {{ authProfile()?.attributes?.firstName }}</span>
   </div>
 </ng-container>
