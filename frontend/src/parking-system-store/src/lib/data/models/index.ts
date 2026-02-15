@@ -7,3 +7,5 @@ export * from './reservation.interface';
 export * from './reservation.attributes';
 export * from './callbacks.model';
 export * from './user.interface';
+export * from './dashboard-analytics.model';
+export * from './dashboard.interface';

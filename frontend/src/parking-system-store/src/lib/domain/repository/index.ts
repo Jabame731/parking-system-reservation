@@ -2,3 +2,4 @@ export * from './auth-repository.interface';
 export * from './parking-repository.interface';
 export * from './reservation-repository.interface';
 export * from './user-repository.interface';
+export * from './dashboard-analytics-repository';

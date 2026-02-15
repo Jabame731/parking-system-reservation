@@ -4,6 +4,7 @@ import { UserRepository } from '../../../repositories';
 import * as fromUser from '../../actions/user/user.actions';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class UserEffects {
@@ -36,14 +37,21 @@ export class UserEffects {
       ofType(fromUser.editUserAttempted),
       switchMap((action) => {
         return this.userRepo.editUser(action.data).pipe(
-          map(() => {
+          switchMap(() => {
             action.callBacks.onSuccess();
             this.snackBar.open('User updated successfully', 'x', {
               horizontalPosition: 'right',
               verticalPosition: 'top',
               duration: 5 * 1000,
             });
-            return fromUser.editUserSucceeded({ data: action.data });
+
+            return [
+              fromUser.editUserSucceeded({ data: action.data }),
+              fromUser.updateUserFirstName({
+                firstName: action.data.firstName,
+                id: action.data.id,
+              }),
+            ];
           }),
           catchError((err) => {
             const cleanMessage = err.message.replace('Error: ', '');

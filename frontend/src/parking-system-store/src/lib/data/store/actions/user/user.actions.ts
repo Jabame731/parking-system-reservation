@@ -43,3 +43,11 @@ export const deleteUserSucceeded = createAction(
     id: string;
   }>(),
 );
+
+export const updateUserFirstName = createAction(
+  '[User] Update User First Name',
+  props<{
+    id: string;
+    firstName: string;
+  }>(),
+);

@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { UserResponseModel } from '../../../models';
 import * as fromAuth from '../../actions/auth/auth.actions';
+import * as fromUser from '../../actions/user/user.actions';
 
 export const authFeatureKey = 'authz';
 
@@ -88,6 +89,22 @@ export const initialAuthReducer = createReducer(
       registerSuccessMessage: null,
       registerError: error,
     };
+  }),
+  on(fromUser.updateUserFirstName, (state, { id, firstName }) => {
+    if (id === state.data?.id) {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          attributes: {
+            ...state.data.attributes,
+            firstName: firstName,
+          },
+        },
+      };
+    }
+
+    return state;
   }),
   on(fromAuth.logoutAttempted, () => ({
     ...initialAuthState,
