@@ -14,7 +14,10 @@ import analyticsRouter from "./routes/analytics/analytics.routes";
 const app = express();
 dotenv.config();
 
-const allowedOrigins = [process.env.DEVELOPMENT_FRONTEND_PORT!];
+const allowedOrigins = [
+  process.env.DEVELOPMENT_FRONTEND_PORT!,
+  process.env.PRODUCTION_FRONTEND_PORT!,
+];
 
 app.use(
   cors({
