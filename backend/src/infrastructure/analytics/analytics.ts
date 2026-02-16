@@ -44,8 +44,6 @@ export const getDashboardAnalyticsData = async (): Promise<
     const peak = (peakRows as any[])[0];
     const months = monthlyRows as any[];
 
-    console.log(months);
-
     const monthNames = [
       "January",
       "February",
