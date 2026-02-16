@@ -15,8 +15,8 @@ const app = express();
 dotenv.config();
 
 const allowedOrigins = [
-  process.env.DEVELOPMENT_FRONTEND_PORT!,
-  process.env.PRODUCTION_FRONTEND_PORT!,
+  "http://localhost:4200",
+  "https://parking-system-reservation-zmel.vercel.app",
 ];
 
 app.use(
