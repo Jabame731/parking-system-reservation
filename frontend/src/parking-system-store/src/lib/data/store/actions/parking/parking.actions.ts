@@ -35,20 +35,25 @@ export const addParkingSlotFailed = createAction(
 );
 
 export const deleteParkingSlotAttempted = createAction(
-  '[Parking] Delelte Parking Slot Attempted',
+  '[Parking] Delete Parking Slot Attempted',
   props<{
     id: string;
   }>(),
 );
 
 export const deleteParkingSlotSucceeded = createAction(
-  '[Parking] Delelte Parking Slot Succeeded',
+  '[Parking] Delete Parking Slot Succeeded',
   props<{
     id: string;
   }>(),
 );
 
 export const deleteParkingSlotFailed = createAction(
-  '[Parking] Delelte Parking Slots Failed',
+  '[Parking] Delete Parking Slots Failed',
   props<{ error: string }>(),
+);
+
+export const getParkingSlotsFromSSE = createAction(
+  '[Parking] Get Parking From SSE Successfully',
+  props<{ data: ParkingResponseData }>(),
 );

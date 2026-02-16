@@ -180,4 +180,10 @@ export const initialParkingReducer = createReducer(
       },
     };
   }),
+  on(fromParking.getParkingSlotsFromSSE, (state, { data }) => {
+    return {
+      ...state,
+      data,
+    };
+  }),
 );

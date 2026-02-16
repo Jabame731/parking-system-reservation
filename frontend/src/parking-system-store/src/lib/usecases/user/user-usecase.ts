@@ -21,13 +21,10 @@ export class UserUsecase {
   getUsers(): Observable<boolean> {
     const loading = this.store.pipe(select(fromStore.loading));
     const loaded = this.store.pipe(select(fromStore.loaded));
-    const isAuthenticated = this.store.select(fromStore.getAuthenticated);
 
-    return combineLatest([loaded, loading, isAuthenticated]).pipe(
-      tap(([loaded, loading, isAuthenticated]) => {
-        console.log(isAuthenticated);
-
-        if (isAuthenticated && !loaded && !loading) {
+    return combineLatest([loaded, loading]).pipe(
+      tap(([loaded, loading]) => {
+        if (!loaded && !loading) {
           this.store.dispatch(fromStore.getUsersAttempted());
         }
       }),

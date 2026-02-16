@@ -135,7 +135,7 @@ export const getParkingSlotById = async (
   const db = connection();
   try {
     const [rows]: any = await db.execute(
-      "SELECT * FROM parking_lot WHERE id = ?",
+      "SELECT * FROM parking_slot WHERE id = ?",
       [slotId],
     );
     if (rows.length === 0) {

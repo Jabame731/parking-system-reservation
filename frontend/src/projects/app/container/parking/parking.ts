@@ -56,6 +56,8 @@ export class Parking implements OnInit, OnDestroy {
   private reservationUsecase = inject(ReservationUsecase);
   private dialog = inject(MatDialog);
 
+  private sseStream!: EventSource;
+
   parkingSlotData = toSignal(this.parkingUsecase.parkingData$);
   loading = toSignal(this.parkingUsecase.loading$);
   authProfile = toSignal(this.authUsecase.authProfile$);
@@ -71,6 +73,10 @@ export class Parking implements OnInit, OnDestroy {
     setTimeout(() => {
       this.pageTitlePortal.setPortal(this.pageTitle);
     });
+
+    setTimeout(() => {
+      this.sseStream = this.parkingUsecase.initLiveUpdates();
+    }, 3000);
   }
 
   handleAddReservation(data: { slot: ParkingSlotConverted }) {
@@ -149,6 +155,10 @@ export class Parking implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.sseStream) {
+      this.sseStream.close();
+    }
+
     if (this.pageTitle?.isAttached) {
       this.pageTitle.detach();
       this.pageTitlePortal.setPortal(null!);

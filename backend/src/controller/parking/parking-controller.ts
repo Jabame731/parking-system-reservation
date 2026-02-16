@@ -143,3 +143,46 @@ export const deleteParkingSlotController = async (
     data: result.data.data,
   });
 };
+
+//SSE GET PARKING SLOTS
+export const getParkingSlotsStreamController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  console.log("runs!");
+
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
+
+  const sendUpdate = async () => {
+    const result = await getAllParkingSlots();
+
+    if (!result.success) {
+      res.write(
+        `event: error\ndata: ${JSON.stringify({ error: result.error.errorMessage })}\n\n`,
+      );
+      return;
+    }
+
+    const payload = JSON.stringify({
+      message: result.data.message,
+      data: result.data.data,
+    });
+
+    res.write(`event: update\n`);
+    res.write(`data: ${payload}\n\n`);
+  };
+
+  await sendUpdate();
+
+  const intervalId = setInterval(sendUpdate, 5000);
+
+  req.on("close", () => {
+    clearInterval(intervalId);
+
+    res.end();
+  });
+};

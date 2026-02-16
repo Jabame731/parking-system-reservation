@@ -1,14 +1,17 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, NgZone } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as fromStore from '../../data/store';
-import { combineLatest, filter, map, Observable, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, Observable, tap } from 'rxjs';
 import { Callbacks, CreateParking } from '../../data/models';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ParkingUsecase {
   private store = inject(Store<fromStore.ParkingState>);
+  private zone = inject(NgZone);
+  private baseUrl = environment.apiBaseUrl;
 
   parkingData$ = this.store.pipe(select(fromStore.getParkingData));
 
@@ -48,5 +51,22 @@ export class ParkingUsecase {
         id,
       }),
     );
+  }
+
+  initLiveUpdates() {
+    const eventSource = new EventSource(`${this.baseUrl}/api/parkingSlots/stream`);
+
+    eventSource.addEventListener('update', (event: MessageEvent) => {
+      this.zone.run(() => {
+        const result = JSON.parse(event.data);
+
+        this.store.dispatch(
+          fromStore.getParkingSlotsFromSSE({
+            data: result.data,
+          }),
+        );
+      });
+    });
+    return eventSource;
   }
 }
