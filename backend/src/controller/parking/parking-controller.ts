@@ -149,8 +149,6 @@ export const getParkingSlotsStreamController = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  console.log("runs!");
-
   res.writeHead(200, {
     "Content-Type": "text/event-stream",
     "Cache-Control": "no-cache",
