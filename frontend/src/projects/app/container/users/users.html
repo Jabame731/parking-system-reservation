@@ -1,12 +1,14 @@
-<div class="grow shrink-0 basis-[680px] flex flex-col h-[680px]">
-  <div class="h-full">
-    <app-users-table
-      [dataSource]="data()!"
-      [skeleton]="loading()"
-      (editUser)="handleEditUser($event)"
-      (deleteUser)="handleDeleteUser($event)"
-    ></app-users-table>
-  </div>
+<div class="grow shrink-0 basis-[740px] flex flex-col h-[740px]">
+  <app-column-container class="grow" [title]="'Registered Accounts'">
+    <div class="h-full p-4">
+      <app-users-table
+        [dataSource]="data()!"
+        [skeleton]="loading()"
+        (editUser)="handleEditUser($event)"
+        (deleteUser)="handleDeleteUser($event)"
+      ></app-users-table>
+    </div>
+  </app-column-container>
 </div>
 
 <ng-container *cdkPortal>

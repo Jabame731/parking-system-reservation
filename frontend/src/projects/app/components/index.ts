@@ -17,3 +17,5 @@ export * from './delete-item-modal/delete-item-modal';
 export * from './add-parking-slot-modal/add-parking-slot-modal';
 export * from './notification/notification';
 export * from './edit-user-modal/edit-user-modal';
+export * from './breakpoint-observer/breakpoint-observer';
+export * from './column-container/column-container';

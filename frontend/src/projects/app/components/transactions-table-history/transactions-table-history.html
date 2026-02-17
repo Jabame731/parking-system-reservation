@@ -1,10 +1,6 @@
 <table mat-table #table [dataSource]="dataSource()!" [trackBy]="trackById" class="app-table">
   <ng-container matColumnDef="plateNumber">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -22,11 +18,7 @@
   </ng-container>
 
   <ng-container matColumnDef="carType">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -44,11 +36,7 @@
   </ng-container>
 
   <ng-container matColumnDef="slotName">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -66,11 +54,7 @@
   </ng-container>
 
   <ng-container matColumnDef="timeStart">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -88,11 +72,7 @@
   </ng-container>
 
   <ng-container matColumnDef="endTime">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -110,11 +90,7 @@
   </ng-container>
 
   <ng-container matColumnDef="paymentType">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -132,11 +108,7 @@
   </ng-container>
 
   <ng-container matColumnDef="status">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -163,11 +135,7 @@
   </ng-container>
 
   <ng-container matColumnDef="actions">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -198,7 +166,7 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true" class="bg-gray-100"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true" class="!bg-gray-100"></tr>
 
   <tr
     mat-row

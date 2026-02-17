@@ -18,6 +18,7 @@ export const routes: Routes = [
       {
         path: 'analytics',
         component: Dashboard,
+        canActivate: [UserGuard, ParkingSlotGuard],
         title: 'Admin Dashboard',
       },
       {

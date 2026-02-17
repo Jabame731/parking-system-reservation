@@ -2,7 +2,7 @@ import { CdkPortal } from '@angular/cdk/portal';
 import { Component, computed, effect, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { PageTitlePortal } from 'projects/app/services';
-import { TransactionsTableHistory } from 'projects/app/components';
+import { TransactionsTableHistory, ColumnContainer } from 'projects/app/components';
 import { AuthUsecase } from '@parking-system-store/lib/usecases';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReservationStore } from '@parking-system-store/public-api';
@@ -12,7 +12,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { DeleteItemModal } from '../../components';
 @Component({
   selector: 'app-transactions',
-  imports: [CdkPortal, MatButtonModule, AsyncPipe, TransactionsTableHistory, JsonPipe],
+  imports: [
+    CdkPortal,
+    MatButtonModule,
+    AsyncPipe,
+    TransactionsTableHistory,
+    JsonPipe,
+    ColumnContainer,
+  ],
   providers: [ReservationStore],
   templateUrl: './transactions.html',
   styleUrl: './transactions.scss',

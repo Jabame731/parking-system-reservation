@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { DeleteItemModal, EditUserModal, UsersTable } from '../../components';
+import { DeleteItemModal, EditUserModal, UsersTable, ColumnContainer } from '../../components';
 import { PageTitlePortal } from '../../services';
 import { UserUsecase } from '@parking-system-store/lib/usecases';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,7 +10,7 @@ import { EditUserData } from '@parking-system-store/public-api';
 
 @Component({
   selector: 'app-users',
-  imports: [UsersTable, CdkPortal],
+  imports: [UsersTable, CdkPortal, ColumnContainer],
   templateUrl: './users.html',
   styleUrl: './users.scss',
 })

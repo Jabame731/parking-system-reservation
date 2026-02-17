@@ -1,6 +1,7 @@
 <h1 class="mb-20">{{ reportTitle }}</h1>
-<div class="">
+<div class="w-full overflow-x-auto">
   <ngx-charts-bar-vertical
+    class="w-full"
     animate.enter="slide-in"
     [view]="view"
     [scheme]="colorScheme"
@@ -18,7 +19,7 @@
   </ngx-charts-bar-vertical>
 </div>
 
-<div class="mt-20 grow grid grid-cols-3 auto-rows-fr rounded overflow-hidden">
+<div class="mt-20 grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 rounded overflow-hidden">
   <!-- Revenue Card -->
   <app-parking-card-status
     [cardTitle]="'Today’s Revenue'"

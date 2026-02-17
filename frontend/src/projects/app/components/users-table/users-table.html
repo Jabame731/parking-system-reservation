@@ -1,10 +1,6 @@
 <table mat-table #table [dataSource]="dataSource()" [trackBy]="trackById" class="app-table">
   <ng-container matColumnDef="fullName">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -22,11 +18,7 @@
   </ng-container>
 
   <ng-container matColumnDef="email">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -44,11 +36,7 @@
   </ng-container>
 
   <ng-container matColumnDef="phoneNumber">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -66,11 +54,7 @@
   </ng-container>
 
   <ng-container matColumnDef="role">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -88,11 +72,7 @@
   </ng-container>
 
   <ng-container matColumnDef="address">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -110,11 +90,7 @@
   </ng-container>
 
   <ng-container matColumnDef="actions">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="app-table__header app-table__header--with-left-border"
-    >
+    <th mat-header-cell *matHeaderCellDef class="app-table__header">
       @if (skeleton()) {
         <app-skeleton-text
           [lines]="1"
@@ -145,12 +121,12 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="bg-gray-100"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="!bg-gray-100"></tr>
 
   <tr
     mat-row
     *matRowDef="let row; columns: displayedColumns"
-    class="hover:bg-gray-50 transition-colors duration-150"
+    class="hover:!bg-gray-50 transition-colors duration-150"
   ></tr>
 
   @if (!skeleton()) {

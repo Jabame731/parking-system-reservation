@@ -1,14 +1,16 @@
 <div class="grow shrink-0 basis-[680px] flex flex-col h-[680px]">
-  <div class="h-full">
-    <app-transactions-table-history
-      [dataSource]="data()!"
-      [userRole]="userRole()!"
-      [skeleton]="loading$ | async"
-      (handleDeleteReservation)="openDeleteModal($event)"
-      (handleUpdateReservation)="updateReservation($event)"
-    >
-    </app-transactions-table-history>
-  </div>
+  <app-column-container class="grow" [title]="'Reservation History'">
+    <div class="h-full p-4">
+      <app-transactions-table-history
+        [dataSource]="data()!"
+        [userRole]="userRole()!"
+        [skeleton]="loading$ | async"
+        (handleDeleteReservation)="openDeleteModal($event)"
+        (handleUpdateReservation)="updateReservation($event)"
+      >
+      </app-transactions-table-history>
+    </div>
+  </app-column-container>
 </div>
 
 <ng-container *cdkPortal>
