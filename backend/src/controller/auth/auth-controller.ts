@@ -11,8 +11,10 @@ export const registerUserController = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  console.log(req.body);
+
   const result: Result<SuccessResponse, ErrorResponse> = await registerUserIn(
-    req.body.data,
+    req.body,
   );
 
   if (!result.success) {
@@ -33,6 +35,8 @@ export const loginUserController = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  console.log(req.body);
+
   const result: Result<
     SuccessResponse<UserResponse>,
     ErrorResponse

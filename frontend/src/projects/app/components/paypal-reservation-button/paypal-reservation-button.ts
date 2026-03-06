@@ -17,35 +17,34 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './paypal-reservation-button.html',
   styleUrl: './paypal-reservation-button.scss',
 })
-export class PaypalReservationButton {
+export class PaypalReservationButton implements OnInit {
   private paypalService = inject(PaypalService);
 
   slot = input<ParkingSlotConverted>();
 
-  public readonly payPalConfig = computed<IPayPalConfig>(() => {
+  public payPalConfig!: IPayPalConfig;
+
+  ngOnInit() {
     const slotData = this.slot() as ParkingSlotConverted;
-    return {
+
+    this.payPalConfig = {
       currency: 'PHP',
       clientId: environment.paypalClientId || 'sb',
       fundingSource: 'PAYPAL',
-      advanced: {
-        commit: 'true',
-      },
-      style: {
-        label: 'paypal',
-        layout: 'vertical',
-      },
+      advanced: { commit: 'true' },
+      style: { label: 'paypal', layout: 'vertical' },
+
       createOrderOnServer: () => {
         return firstValueFrom(this.paypalService.createPaypalReservation(slotData.reservationId));
       },
+
       onApprove: (data, actions) => {
         this.paypalService.approvePaypalReservation(slotData.reservationId, data.orderID);
       },
-      onCancel: (data, actions) => console.log('OnCancel', data, actions),
+
+      onCancel: (data, actions) => console.log('OnCancel', data),
       onError: (err) => console.log('OnError', err),
-      onClick: (data, actions) => {
-        console.log('Clicked slot:', slotData);
-      },
+      onClick: () => console.log('Clicked slot:', slotData),
     };
-  });
+  }
 }

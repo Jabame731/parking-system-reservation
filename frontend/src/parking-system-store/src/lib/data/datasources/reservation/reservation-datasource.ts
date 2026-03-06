@@ -103,6 +103,8 @@ export class ReservationDatasource implements ReservationInterface {
   }
 
   deleteReservation(reservationId: string): Observable<boolean> {
+    console.log('called dataspurce');
+
     return this.http
       .delete(`${this.baseUrl}/api/parkingReservation/${reservationId}`, {
         withCredentials: true,
