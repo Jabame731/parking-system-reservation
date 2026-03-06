@@ -10,8 +10,8 @@ const char* password = "";
 //NOTE CHANGE THE HTTPCLIENT HTTP TO HTTPS ON PRODUCTION
 
 //PC's IP and Express port
-const char* apiUrl = "http://192.168.1.15:8800/api/sensor";
-// const char* apiUrl = "https://parking-system-reservation.vercel.app/api/sensor";
+// const char* apiUrl = "http://192.168.1.15:8800/api/sensor";
+const char* apiUrl = "https://parking-system-reservation.vercel.app/api/sensor";
 
 const int irPin = D5;
 int lastState = -1;
@@ -27,7 +27,7 @@ void setup() {
   
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
-    Serial.print(".");
+    Serial.print("\nConnecting...");
   }
 
   Serial.println("\nWiFi Connected!");
@@ -60,7 +60,14 @@ void loop() {
 }
 
 void fetchActiveSlots() {
-  WiFiClient client; 
+  // for development
+  // WiFiClient client; 
+  // HTTPClient http;
+
+  // for production
+  WiFiClientSecure client; 
+  client.setInsecure();
+
   HTTPClient http;
 
   Serial.println("[HTTP] Fetching slots...");
@@ -105,7 +112,13 @@ void fetchActiveSlots() {
 }
 
 void sendSensorUpdate(int sensorValue) {
-  WiFiClient client;
+  // for development
+  // WiFiClient client;
+
+  // for production
+  WiFiClientSecure client; 
+  client.setInsecure();    
+
   HTTPClient http;
 
   if (http.begin(client, apiUrl)) {
