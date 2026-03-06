@@ -10,6 +10,7 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 import { Reservation } from '../../models';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteItemModal } from '../../components';
+import { of } from 'rxjs';
 @Component({
   selector: 'app-transactions',
   imports: [
@@ -75,8 +76,15 @@ export class Transactions implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((res) => {
+      console.log('called');
+      console.log('!!res', !!res);
+
       if (!!res) {
-        this.reservationStore.deleteReservation({ reservationId: data.reservation.id });
+        console.log('this fires');
+
+        this.reservationStore.deleteReservation({
+          reservationId: data.reservation.id,
+        });
       }
     });
   }

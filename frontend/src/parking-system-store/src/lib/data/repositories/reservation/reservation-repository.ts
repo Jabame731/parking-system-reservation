@@ -31,6 +31,8 @@ export class ReservationRepository implements ReservationRepositoryInterface {
   }
 
   deleteReservation(reservationId: string): Observable<boolean> {
+    console.log('repository');
+
     return this.reservationDatasource.deleteReservation(reservationId);
   }
 

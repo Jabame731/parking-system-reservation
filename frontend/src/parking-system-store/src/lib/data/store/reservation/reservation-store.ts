@@ -3,7 +3,7 @@ import { ComponentStore } from '@ngrx/component-store';
 import { Reservation, ReservationResponse } from '../../models';
 import { ReservationRepository } from '../../repositories';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { concatMap, Observable, tap } from 'rxjs';
+import { concatMap, Observable, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { ParkingUsecase } from '../../../usecases';
 import * as fromReservation from '../actions/reservation/reservation.actions';
@@ -124,7 +124,7 @@ export class ReservationStore extends ComponentStore<ReservationComponenStoreSta
 
   readonly deleteReservation = this.effect((actions$: Observable<{ reservationId: string }>) => {
     return actions$.pipe(
-      concatMap((payload) => {
+      switchMap((payload) => {
         return this.reservationRepo.deleteReservation(payload.reservationId).pipe(
           tapResponse({
             next: (data) => {
@@ -151,7 +151,7 @@ export class ReservationStore extends ComponentStore<ReservationComponenStoreSta
 
   readonly updateReservation = this.effect((actions$: Observable<{ reservationId: string }>) => {
     return actions$.pipe(
-      concatMap((payload) => {
+      switchMap((payload) => {
         return this.reservationRepo.updateReservation(payload.reservationId).pipe(
           tapResponse({
             next: () => {
