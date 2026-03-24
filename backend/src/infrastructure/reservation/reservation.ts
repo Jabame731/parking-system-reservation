@@ -235,12 +235,16 @@ export const deleteReservationById = async (
   const db = connection();
 
   try {
-    const [result] = await db.execute(`DELETE FROM reservation WHERE id = ?`, [
-      reservationId,
-    ]);
-    const insertResult = result as ResultSetHeader;
+    // 1. Fetch reservation FIRST
+    const [rows] = await db.query(
+      `SELECT slotId, licensePlate FROM reservation WHERE id = ? FOR UPDATE`,
+      [reservationId],
+    );
 
-    if (insertResult.affectedRows === 0) {
+    const reservations = rows as Reservation[];
+
+    if (reservations.length === 0) {
+      await db.rollback();
       return {
         success: false,
         error: {
@@ -250,11 +254,45 @@ export const deleteReservationById = async (
       };
     }
 
+    const { slotId, licensePlate } = reservations[0]!;
+
+    // 2. Delete reservation
+    const [result] = await db.execute(`DELETE FROM reservation WHERE id = ?`, [
+      reservationId,
+    ]);
+
+    const deleteResult = result as ResultSetHeader;
+
+    if (deleteResult.affectedRows === 0) {
+      await db.rollback();
+      return {
+        success: false,
+        error: {
+          statusCode: 404,
+          errorMessage: "Reservation not found",
+        },
+      };
+    }
+
+    // 3. Only update if licensePlate exists
+    if (licensePlate && licensePlate !== "") {
+      await db.execute(
+        `
+        UPDATE parking_slot
+        SET 
+          carOccupied = '',
+          slotStatus = 'AVAILABLE'
+        WHERE id = ?
+        `,
+        [slotId],
+      );
+    }
+
     return {
       success: true,
       data: {
         statusCode: 200,
-        message: "Reservation record deleted successfully",
+        message: "Reservation deleted and slot updated",
       },
     };
   } catch (error) {
