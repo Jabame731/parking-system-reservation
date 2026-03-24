@@ -292,7 +292,7 @@ export const deleteReservationById = async (
       success: true,
       data: {
         statusCode: 200,
-        message: "Reservation deleted and slot updated",
+        message: "Reservation deleted successfully",
       },
     };
   } catch (error) {
